@@ -1,8 +1,19 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+::-webkit-scrollbar {
+  width: 5px;
+  /* Chiều rộng thanh cuộn */
+  height: 2px;
+  /* Chiều cao thanh cuộn */
+  background: #dbdbdb;
+  /* Màu nền thanh cuộn */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e31836;
+  /* Màu thanh trượt */
+  border-radius: 10px;
+  /* Bán kính bo tròn của thanh trượt */
 }
