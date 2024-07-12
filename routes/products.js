@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const productCtrl = require('../controllers/productController')
 const multer = require('multer');
 const multerImg = multer({ dest: 'public/uploads' })
