@@ -1,7 +1,6 @@
 const db = require('./db');
 const mongooseDelete = require('mongoose-delete');
 
-
 const userSchema = new db.mongoose.Schema(
    {
       name: { type: String, required: true },
@@ -24,6 +23,7 @@ const productSchema = new db.mongoose.Schema(
       image: { type: String, required: true },
       description: { type: String, required: false },
       category: { type: db.mongoose.Schema.Types.ObjectId, ref: 'categoryModel' },
+      imageId: { type: String, required: true }
    },
    {
       collection: 'product',
@@ -100,6 +100,11 @@ const addressSchema = new db.mongoose.Schema(
 
 // Plugin
 productSchema.plugin(mongooseDelete, {
+   deletedAt: true,
+   overrideMethods: 'all'
+})
+
+categorySchema.plugin(mongooseDelete, {
    deletedAt: true,
    overrideMethods: 'all'
 })

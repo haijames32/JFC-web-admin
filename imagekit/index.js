@@ -1,15 +1,11 @@
+require('dotenv').config()
 const ImageKit = require("imagekit")
 
 const imagekit = new ImageKit({
-   publicKey: 'public_F3whUmHQXoFwcORplUBA2iun0Uo=',
-   privateKey: 'private_EVRLtH8S4pNIrtPiuZw0KWOEsQs=',
-   urlEndpoint: 'https://ik.imagekit.io/haijames32/'
+   publicKey: process.env.IMAGE_PUBLIC_KEY,
+   privateKey: process.env.IMAGE_PRIVATE_KEY,
+   urlEndpoint: process.env.IMAGE_URL
 });
-// const imagekit = new ImageKit({
-//    publicKey: process.env.IMAGE_PUBLIC_KEY,
-//    privateKey: process.env.IMAGE_PRIVATE_KEY,
-//    urlEndpoint: process.env.IMAGE_ROOT_URL
-// });
 
 const uploadImage = async (filePath, fileName) => {
    try {
@@ -24,13 +20,17 @@ const uploadImage = async (filePath, fileName) => {
    }
 }
 
-const deleteImage = async (filePath, newFileName) => {
+const deleteImage = async (fileId) => {
    try {
-      const res = await imagekit.deleteFile()
+      const res = await imagekit.deleteFile(fileId)
       return res
    } catch (error) {
       console.log('Lỗi DeleteImage: ', error);
    }
 }
 
-module.exports = { imagekit, uploadImage, deleteImage }
+module.exports = {
+   imagekit,
+   uploadImage,
+   deleteImage
+}

@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var dotenv = require('dotenv')
 
 var mainRouter = require('./routes/main');
 var usersRouter = require('./routes/users');
@@ -11,7 +12,7 @@ var apiRouter = require('./routes/api');
 
 var app = express();
 
-require('dotenv').config()
+dotenv.config()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
