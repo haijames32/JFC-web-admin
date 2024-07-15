@@ -1,10 +1,12 @@
 const myModel = require('../models/MyModel')
+const fs = require('fs')
 const imgkit = require('../imagekit')
 
 
 const getListProd = async (req, res, next) => {
-   const listProd = await myModel.productModel.find()
-   res.render('product/list', { listProd })
+   const listProd = await myModel.productModel.find().populate('category')
+   const listCate = await myModel.categoryModel.find()
+   res.render('product/list', { listProd, listCate })
 }
 
 const detailsProd = async (req, res, next) => {
@@ -66,7 +68,7 @@ const putProd = async (req, res, next) => {
             fs.unlinkSync(filePath)
 
             // Xóa image cũ khi update image mới lên imagekit
-            await imgkit.deleteImage(imageId)
+            // await imgkit.deleteImage(imageId)
          }
          const body = {
             name,
@@ -96,10 +98,8 @@ const deleteProd = async (req, res, next) => {
 
 const forceDeleteProd = async (req, res, next) => {
    try {
-      // const id = req.params.id
-      // const product = await myModel.productModel.findById({ _id: id })
-      const product = await myModel.productModel.findByIdAndDelete({ _id: req.params.id })
-      await imgkit.deleteImage(product.imageId)
+      await myModel.productModel.findByIdAndDelete({ _id: req.params.id })
+      // await imgkit.deleteImage(product.imageId)
       return res.redirect('/products')
    } catch (error) {
       console.log("Error Force Delete: ", error);

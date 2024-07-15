@@ -22,7 +22,7 @@ const productSchema = new db.mongoose.Schema(
       price: { type: Number, required: true },
       image: { type: String, required: true },
       description: { type: String, required: false },
-      category: { type: db.mongoose.Schema.Types.ObjectId, ref: 'categoryModel' },
+      category: { type: db.mongoose.Schema.Types.ObjectId, ref: 'categoryModel', required: true },
       imageId: { type: String, required: true }
    },
    {
