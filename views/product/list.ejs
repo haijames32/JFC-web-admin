@@ -25,12 +25,25 @@
          <% }) %>
    </div> -->
 
+   <div class="container col-9 d-flex" style="align-items: center; justify-content: space-between; margin-top: 80px;">
+      <h1 class="fw-semibold">Products</h1>
+      <a href="/trash" class="btn text-white btn-primary " data-mdb-ripple-init>
+         <i class="fas fa-trash"></i>
+         <span class="badge rounded-pill badge-notification bg-danger" style="top: -8px; right: -4px;">
+            <%= listProdDeleted %>
+         </span>
+      </a>
+   </div>
+   <hr>
 
-   <div class="container col-8" style="margin-top: 100px;">
+   <div class="container col-9">
       <div class="d-flex mb-3">
          <div class="container d-flex align-items-center" style="justify-content: space-between;">
             <div class="d-flex col">
-               <div class="form-check mt-2" style="width: 110px;">
+               <a href="/products" class="btn text-white btn-primary" data-mdb-ripple-init>
+                  <i class="fas fa-refresh"></i>
+               </a>
+               <div class="form-check mt-2 ms-2" style="width: 109px;">
                   <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
                   <label class="form-check-label" for="flexCheckDefault">Chọn tất cả</label>
                </div>
@@ -45,11 +58,18 @@
                   <div>
                      <select class="form-select ms-2" aria-label="Default select example" name="filterCate" required>
                         <option value="" selected>Thể loại</option>
-                        <% listCate.forEach(item=>{ %>
-                           <option value="<%= item._id %>">
-                              <%= item.name %>
-                           </option>
-                           <% }) %>
+                        <% listCate.forEach((item, index)=>{ %>
+                           <% if(index==indexCate){ %>
+                              <option value="<%= item._id %>" selected="selected">
+                                 <%= item.name %>
+                              </option>
+                              <% }else{ %>
+                                 <option value="<%= item._id %>">
+                                    <%= item.name %>
+                                 </option>
+                                 <% } %>
+
+                                    <% }) %>
                      </select>
                   </div>
                   <button type="submit" class="btn btn-primary ms-3" data-mdb-ripple-init>OK</button>

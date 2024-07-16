@@ -6,11 +6,16 @@ const rootCate = '66913f96a4a35e2e6efb07f1'
 
 const getListProd = async (req, res, next) => {
    let finder = null
+   const listCate = await myModel.categoryModel.find()
 
    // Filter by Category
    const cateId = req.query.filterCate
+   let indexCate = 0
    if (cateId) {
       finder = { category: cateId }
+      listCate.map((item, index) => {
+         if (item.id == cateId) indexCate = index
+      })
    }
 
    // Search by Name
@@ -21,8 +26,9 @@ const getListProd = async (req, res, next) => {
 
 
    const listProd = await myModel.productModel.find(finder).populate('category').sort({ name: 1 }).limit()
-   const listCate = await myModel.categoryModel.find()
-   res.render('product/list', { listProd, listCate, cateId })
+   const listProdDeleted = await myModel.productModel.countDocumentsWithDeleted({ deleted: true })
+   console.log(listProdDeleted);
+   res.render('product/list', { listProd, listCate, listProdDeleted, cateId, indexCate })
 }
 
 const detailsProd = async (req, res, next) => {
@@ -119,15 +125,6 @@ const deleteProd = async (req, res, next) => {
    }
 }
 
-const forceDeleteProd = async (req, res, next) => {
-   try {
-      await myModel.productModel.findByIdAndDelete({ _id: req.params.id })
-      // await imgkit.deleteImage(product.imageId)
-      return res.redirect('/trash')
-   } catch (error) {
-      console.log("Error Force Delete: ", error);
-   }
-}
 
 module.exports = {
    getListProd,
@@ -136,5 +133,4 @@ module.exports = {
    getPutProd,
    putProd,
    deleteProd,
-   forceDeleteProd,
 }
