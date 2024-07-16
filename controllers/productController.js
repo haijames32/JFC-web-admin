@@ -2,10 +2,25 @@ const myModel = require('../models/MyModel')
 const fs = require('fs')
 const imgkit = require('../imagekit')
 
+const rootCate = '66913f96a4a35e2e6efb07f1'
 
 const getListProd = async (req, res, next) => {
-   const cateId = req.params.id
-   const listProd = await myModel.productModel.find({ category: cateId }).populate('category')
+   let finder = null
+
+   // Filter by Category
+   const cateId = req.query.filterCate
+   if (cateId) {
+      finder = { category: cateId }
+   }
+
+   // Search by Name
+   const search = req.query.searchName
+   if (search) {
+      finder = { name: { $regex: '.*' + search + '.*' } }
+   }
+
+
+   const listProd = await myModel.productModel.find(finder).populate('category').sort({ name: 1 }).limit()
    const listCate = await myModel.categoryModel.find()
    res.render('product/list', { listProd, listCate, cateId })
 }
@@ -41,7 +56,7 @@ const postProd = async (req, res, next) => {
          })
          const new_prod = await newProd.save()
          console.log('ADD :', new_prod);
-         return res.redirect(`/products/${cateId}`)
+         return res.redirect(`/products`)
       } catch (error) {
          console.log('Error ADD: ', error);
       }
@@ -76,7 +91,7 @@ const putProd = async (req, res, next) => {
             fs.unlinkSync(filePath)
 
             // Xóa image cũ khi update image mới lên imagekit
-            // await imgkit.deleteImage(imageId)
+            await imgkit.deleteImage(imageId)
          }
          const body = {
             name,
@@ -88,7 +103,7 @@ const putProd = async (req, res, next) => {
          }
          await myModel.productModel.findByIdAndUpdate({ _id: id }, body)
          console.log('PUT: ', { id, body });
-         return res.redirect('/products/66913f96a4a35e2e6efb07f1');
+         return res.redirect(`/products`);
       } catch (error) {
          console.log("Error PUT: ", error);
       }
@@ -98,7 +113,7 @@ const putProd = async (req, res, next) => {
 const deleteProd = async (req, res, next) => {
    try {
       await myModel.productModel.delete({ _id: req.params.id })
-      return res.redirect('/products')
+      return res.redirect(`/products`)
    } catch (error) {
       console.log('Error Delete: ', error);
    }
@@ -108,7 +123,7 @@ const forceDeleteProd = async (req, res, next) => {
    try {
       await myModel.productModel.findByIdAndDelete({ _id: req.params.id })
       // await imgkit.deleteImage(product.imageId)
-      return res.redirect('/products')
+      return res.redirect('/trash')
    } catch (error) {
       console.log("Error Force Delete: ", error);
    }
