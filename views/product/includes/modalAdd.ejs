@@ -2,7 +2,7 @@
 <div class="modal fade" id="modalAddProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
    <div class="modal-dialog">
       <div class="modal-content">
-         <form method="post" action="" enctype="multipart/form-data">
+         <form method="post" action="/products" enctype="multipart/form-data">
             <div class="modal-header">
                <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
                <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
@@ -32,7 +32,8 @@
                   </div>
                </div>
                <div class="col">
-                  <input class="mb-4" type="file" class="form-control" id="customFile" name="post_img_file" required />
+                  <input class="mb-4 border border-info" style="cursor: pointer;" type="file" class="form-control"
+                     id="customFile" name="post_img_file" required />
                </div>
                <div data-mdb-input-init class="form-outline mb-4">
                   <textarea class="form-control" id="form4Example3" rows="4" name="description"></textarea>

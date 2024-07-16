@@ -9,6 +9,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 router.get('/', productCtrl.getListProd)
+router.get('/cate/:id', productCtrl.getListProd)
 router.get('/:id/details', productCtrl.detailsProd)
 router.post('/', multerImg.single('post_img_file'), productCtrl.postProd)
 router.get('/:id/edit', productCtrl.getPutProd)

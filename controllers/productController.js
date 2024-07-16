@@ -8,27 +8,42 @@ const getListProd = async (req, res, next) => {
    let finder = null
    const listCate = await myModel.categoryModel.find()
 
+   const cateId = req.params.id
+   if (cateId) finder = { category: cateId }
+
    // Filter by Category
-   const cateId = req.query.filterCate
-   let indexCate = 0
-   if (cateId) {
-      finder = { category: cateId }
+   const categoryId = req.query.filterCate
+   let indexCate = null
+   if (categoryId) {
+      finder = { category: categoryId }
       listCate.map((item, index) => {
-         if (item.id == cateId) indexCate = index
+         if (item.id == categoryId) indexCate = index
       })
    }
 
    // Search by Name
    const search = req.query.searchName
-   if (search) {
-      finder = { name: { $regex: '.*' + search + '.*' } }
+   if (search) finder = { name: { $regex: '.*' + search + '.*' } }
+
+
+   //Skip Product
+   let skipProd = 0
+   const skip = req.query.skipProduct
+   if (skip) {
+      switch (skip) {
+         case '0': skipProd = 0; break
+         case '5': skipProd = 5; break
+         case '10': skipProd = 10; break
+         case '15': skipProd = 15; break
+         case '20': skipProd = 20; break
+         case '25': skipProd = 25; break
+         case '30': skipProd = 30; break
+      }
    }
 
-
-   const listProd = await myModel.productModel.find(finder).populate('category').sort({ name: 1 }).limit()
+   const listProd = await myModel.productModel.find(finder).skip(skipProd).populate('category').sort({ category: 1 }).limit()
    const listProdDeleted = await myModel.productModel.countDocumentsWithDeleted({ deleted: true })
-   console.log(listProdDeleted);
-   res.render('product/list', { listProd, listCate, listProdDeleted, cateId, indexCate })
+   res.render('product/list', { listProd, listCate, listProdDeleted, cateId, indexCate, skipProd })
 }
 
 const detailsProd = async (req, res, next) => {
@@ -62,7 +77,7 @@ const postProd = async (req, res, next) => {
          })
          const new_prod = await newProd.save()
          console.log('ADD :', new_prod);
-         return res.redirect(`/products`)
+         return res.redirect(`/products/`)
       } catch (error) {
          console.log('Error ADD: ', error);
       }
