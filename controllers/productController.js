@@ -4,17 +4,19 @@ const imgkit = require('../imagekit')
 
 
 const getListProd = async (req, res, next) => {
-   const listProd = await myModel.productModel.find().populate('category')
+   const cateId = req.params.id
+   const listProd = await myModel.productModel.find({ category: cateId }).populate('category')
    const listCate = await myModel.categoryModel.find()
-   res.render('product/list', { listProd, listCate })
+   res.render('product/list', { listProd, listCate, cateId })
 }
 
 const detailsProd = async (req, res, next) => {
    const product = await myModel.productModel.findById({ _id: req.params.id })
-   res.render('product/list', { product })
+   res.render('product/details', { product })
 }
 
 const postProd = async (req, res, next) => {
+   const cateId = req.params.id
    if (req.method == 'POST') {
       try {
          const { name, price, description, category } = req.body
@@ -39,11 +41,17 @@ const postProd = async (req, res, next) => {
          })
          const new_prod = await newProd.save()
          console.log('ADD :', new_prod);
-         return res.redirect('/products')
+         return res.redirect(`/products/${cateId}`)
       } catch (error) {
          console.log('Error ADD: ', error);
       }
    }
+}
+
+const getPutProd = async (req, res, next) => {
+   const product = await myModel.productModel.findById({ _id: req.params.id }).populate('category')
+   const listCate = await myModel.categoryModel.find()
+   res.render('product/edit', { product, listCate })
 }
 
 const putProd = async (req, res, next) => {
@@ -78,9 +86,9 @@ const putProd = async (req, res, next) => {
             category,
             imageId: imgId || imageId
          }
-         await myModel.userModel.findByIdAndUpdate({ _id: id }, body)
+         await myModel.productModel.findByIdAndUpdate({ _id: id }, body)
          console.log('PUT: ', { id, body });
-         return res.redirect('/products');
+         return res.redirect('/products/66913f96a4a35e2e6efb07f1');
       } catch (error) {
          console.log("Error PUT: ", error);
       }
@@ -110,6 +118,7 @@ module.exports = {
    getListProd,
    detailsProd,
    postProd,
+   getPutProd,
    putProd,
    deleteProd,
    forceDeleteProd,

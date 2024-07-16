@@ -1,0 +1,62 @@
+<%- include('../includes/header.ejs') %>
+
+   <div class="container text-center" style="margin-top: 100px;">
+      <h3>Update Product</h3>
+   </div>
+
+   <form method="post" action="/products/<%= product._id %>/edit?_method=PUT" enctype="multipart/form-data"
+      class="container col-7 d-flex mt-4">
+      <div class="col-6 d-flex flex-column justify-content-center align-items-center">
+         <div>
+            <img src="<%= product.image %>" class="rounded border" style="width: 250px; height: 250px;">
+         </div>
+         <div class="col">
+            <input class="mb-4 border border-info" type="file" class="form-control" name="put_img_file" />
+         </div>
+      </div>
+
+      <div class="col-6 d-flex flex-column justify-content-center">
+         <div data-mdb-input-init class="form-outline mb-4">
+            <input type="text" id="form3Example3" class="form-control" name="name" value="<%= product.name %>"
+               required />
+            <label class="form-label" for="form3Example3">Name</label>
+         </div>
+         <div class="row mb-4">
+            <div class="col-7">
+               <div data-mdb-input-init class="form-outline">
+                  <input type="number" id="form3Example1" class="form-control" name="price" value="<%= product.price %>"
+                     required />
+                  <label class="form-label" for="form3Example1">Price</label>
+               </div>
+            </div>
+            <div class="col-5">
+               <select class="form-select" aria-label="Default select example" name="category" required>
+                  <option value="">Loại sản phẩm</option>
+                  <% listCate.forEach(cate=>{ %>
+                     <% if(String(product.category._id)==String(cate._id)){ %>
+                        <option value="<%= cate._id %>" selected>
+                           <%= cate.name %>
+                        </option>
+                        <% } else{ %>
+                           <option value="<%= cate._id %>">
+                              <%= cate.name %>
+                           </option>
+                           <% } %>
+                              <% }) %>
+               </select>
+            </div>
+         </div>
+         <div data-mdb-input-init class="form-outline mb-4">
+            <textarea class="form-control" id="form4Example3" rows="4"
+               name="description"><%= product.description %></textarea>
+            <label class="form-label" for="form4Example3">Description</label>
+         </div>
+         <div class="text-end">
+            <button type="submit" class="btn btn-primary" data-mdb-ripple-init>SAVE CHANGES</button>
+         </div>
+      </div>
+   </form>
+
+
+
+   <%- include('../includes/footer.ejs') %>

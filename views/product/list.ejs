@@ -9,13 +9,19 @@
    <div class="container col-9 d-flex flex-row align-items-center"
       style="height: 100px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; justify-content: center; background-color: #f8dbe0;">
       <% listCate.forEach(item=>{ %>
-         <div class="d-flex flex-column align-items-center rounded item-cate"
-            style="width: 130px; height: 80px; margin-left: 8px; margin-right: 8px; cursor: pointer;">
+         <a href="/products/<%= item._id %>" class="d-flex flex-column align-items-center rounded item-cate"
+            style="width: 130px; height: 80px; margin-left: 8px; margin-right: 8px; cursor: pointer; text-decoration: none;">
             <img src="<%= item.image %>" class="rounded" style="width: 55px; height: 55px;">
-            <span style="font-size: 14px; font-weight: bold;">
-               <%= item.name %>
-            </span>
-         </div>
+            <% if(cateId==item._id){ %>
+               <span style="font-size: 14px; font-weight: bold; color: #e31836;">
+                  <%= item.name %>
+               </span>
+               <% }else{ %>
+                  <span style="font-size: 14px; font-weight: bold;">
+                     <%= item.name %>
+                  </span>
+                  <% } %>
+         </a>
          <% }) %>
    </div>
 
@@ -102,8 +108,8 @@
                         </p>
                      </td>
                      <td>
-                        <a class="btn text-white btn-sm btn-floating bg-primary" data-mdb-ripple-init href="#!"
-                           role="button">
+                        <a class="btn text-white btn-sm btn-floating bg-primary" href="/products/<%= item._id %>/edit"
+                           data-mdb-ripple-init>
                            <i class="fas fa-pen"></i>
                         </a>
                         <a class="btn text-white btn-sm btn-floating" data-mdb-ripple-init data-mdb-modal-init
@@ -122,7 +128,6 @@
             </div>
             <% } %>
    </div>
-
 
    <!-- Modal Delete to Trash Product -->
    <%- include('./includes/modalDelete.ejs') %>
