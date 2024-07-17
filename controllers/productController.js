@@ -43,7 +43,7 @@ const getListProd = async (req, res, next) => {
 
    const listProd = await myModel.productModel.find(finder).skip(skipProd).populate('category').sort({ category: 1 }).limit()
    const listProdDeleted = await myModel.productModel.countDocumentsWithDeleted({ deleted: true })
-   res.render('product/list', { listProd, listCate, listProdDeleted, cateId, indexCate, skipProd })
+   res.render('product/list', { listProd, listCate, listProdDeleted, cateId, indexCate, skipProd, search })
 }
 
 const detailsProd = async (req, res, next) => {
