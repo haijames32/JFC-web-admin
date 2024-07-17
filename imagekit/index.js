@@ -12,7 +12,7 @@ const uploadImage = async (filePath, fileName) => {
       const res = await imagekit.upload({
          file: filePath, //required
          fileName: fileName,   //required
-         useUniqueFileName: false, //Nếu để true thì sẽ thêm các ký tự vào tên ảnh khi upload
+         useUniqueFileName: true, //Nếu để true thì sẽ thêm các ký tự vào tên ảnh khi upload
       })
       return res
    } catch (error) {
