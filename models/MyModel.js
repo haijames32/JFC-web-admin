@@ -4,11 +4,13 @@ const mongooseDelete = require('mongoose-delete');
 const userSchema = new db.mongoose.Schema(
    {
       name: { type: String, required: true },
+      username: { type: String, required: true },
       email: { type: String, required: true },
       phone: { type: Number, required: true },
-      address: { type: db.mongoose.Schema.Types.ObjectId, ref: 'addressModel', required: false },
-      addressDefault: { type: String, required: false },
       passwd: { type: String, required: true },
+      dateOfBirth: { type: String, required: true },
+      addressDefault: { type: db.mongoose.Schema.Types.ObjectId, ref: 'addressModel', required: false },
+
    },
    {
       collection: 'user',

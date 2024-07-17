@@ -28,29 +28,7 @@
          <% }) %>
    </div>
 
-   <!-- <div class="container col-9 d-flex" style="align-items: center; justify-content: space-between;">
-      <h1 class="fw-semibold">Products</h1>
-      <a href="/trash" class="btn text-white btn-primary " data-mdb-ripple-init>
-         <i class="fas fa-trash"></i>
-         <span class="badge rounded-pill badge-notification bg-danger" style="top: -8px; right: -4px;">
-            <%= listProdDeleted %>
-         </span>
-      </a>
-   </div> -->
    <hr>
-   <!-- <div class="container col-9 d-flex flex-row align-items-center"
-      style="height: 50px; border-radius: 20px; justify-content: center; background-color: #f8dbe0;">
-
-      <% listCate.forEach(item=>{ %>
-         <button type="submit" class="btn btn-primary me-2 ms-2" data-mdb-ripple-init name="cateId"
-            value="<%= item._id %>">
-            <%= item.name %>
-         </button>
-         <% }) %>
-
-
-
-   </div> -->
 
    <div class="container col-9">
       <div class="d-flex mb-3">
@@ -126,16 +104,15 @@
       <!-- Modal Add Product -->
       <%- include('./includes/modalAdd.ejs') %>
 
-
-         <table class="table table-hover align-middle mb-0 bg-white">
+         <table class="table table-hover table-sm align-middle mb-0 bg-white">
             <thead class="bg-light">
-               <tr class="table-danger">
-                  <th>#</th>
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Price</th>
-                  <th>Category</th>
-                  <th>Actions</th>
+               <tr class="table-info">
+                  <th scope="col" style="font-size: 15px;">#</th>
+                  <th scope="col" style="font-size: 15px;">Image</th>
+                  <th scope="col" style="font-size: 15px;">Name</th>
+                  <th scope="col" style="font-size: 15px;">Price</th>
+                  <th scope="col" style="font-size: 15px;">Category</th>
+                  <th scope="col" style="font-size: 15px;">Actions</th>
                </tr>
             </thead>
             <tbody>
