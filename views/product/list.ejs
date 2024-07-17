@@ -6,11 +6,14 @@
       }
    </style>
 
+
+
    <div class="container col-9 d-flex flex-row align-items-center"
       style="height: 80px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; justify-content: center; background-color: #f8dbe0;">
       <% listCate.forEach(item=>{ %>
-         <a href="/products/cate/<%= item._id %>" class="d-flex flex-column align-items-center rounded item-cate"
-            style="width: 115px; height: 60px; margin-left: 8px; margin-right: 8px; cursor: pointer; text-decoration: none;">
+         <a href="/products/cate/<%= item._id %>"
+            class="d-flex flex-column align-items-center rounded text-black item-cate"
+            style="width: 115px; height: 60px; margin-left: 8px; margin-right: 8px; cursor: pointer;">
             <img src="<%= item.image %>" class="rounded" style="width: 40px; height: 40px;">
             <% if(cateId==item._id){ %>
                <span style="font-size: 13px; font-weight: bold; color: #e31836;">
@@ -101,7 +104,7 @@
                               name="searchName" />
                            <label class="form-label" for="form1">Search</label>
                         </div>
-                        <button type="submit" class="btn btn-primary" data-mdb-ripple-init>
+                        <button type="submit" class="btn btn-primary" style="z-index: 0;" data-mdb-ripple-init>
                            <i class="fas fa-search"></i>
                         </button>
                      </form>
