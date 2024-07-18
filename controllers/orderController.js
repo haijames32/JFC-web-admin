@@ -2,28 +2,39 @@ const myModel = require('../models/MyModel')
 
 const getListOrder = async (req, res, next) => {
    let finder = null
-
    // Search by Name user
    const search = req.query.searchOrder
    if (search) {
       const regex = new RegExp('.*' + search + '.*', 'i');
       finder = { name: { $regex: regex } }
    }
-
    const listOrder = await myModel.orderModel.find(finder).sort({ status: 1 }).populate('userId')
    res.render('order/list', { listOrder })
 }
 
 const getOrderDetails = async (req, res, next) => {
-   // const id = req.params.id
-   // const order = await myModel.orderModel.findById({ _id: id })
-   // const orderDetails = await myModel.orderDetailsModel.find().populate('orderId').populate('productId')
-   res.render('order/details')
+   const order = await myModel.orderModel.findById({ _id: req.params.id }).populate('userId')
+   const user = await myModel.userModel.findById({ _id: order.userId._id })
+   const addressOfUser = await myModel.addressModel.findById({ _id: user.addressDefault })
+   const { street, commune, district, city } = addressOfUser
+   const iaddress = {
+      street,
+      commune,
+      district,
+      city,
+   }
+   let address = ''
+   for (const property in iaddress) {
+      if (typeof iaddress[property] === 'string') {
+         address += iaddress[property] + ', ';
+      }
+   }
+   const orderDetails = await myModel.orderDetailsModel.find({ orderId: order._id }).populate('orderId').populate('productId')
+   res.render('order/details', { order, orderDetails, addressOfUser, address })
 }
 
 const getListFinished = async (req, res, next) => {
    let finder = null
-
    // Search by Name user
    const search = req.query.searchOrder
    if (search) {
@@ -37,16 +48,7 @@ const getListFinished = async (req, res, next) => {
 const putStatus = async (req, res, next) => {
    try {
       const id = req.params.id
-      const body = req.body.changeStatus
-      let status = ''
-
-      switch (body) {
-         case 'confirm': status = 'Đã xác nhận'; break
-         case 'delivering': status = 'Đang giao hàng'; break
-         case 'finish': status = 'Hoàn thành'; break
-         default: status = ''; break
-      }
-
+      const status = req.body.changeStatus
       await myModel.orderModel.findByIdAndUpdate({ _id: id }, { status })
       return res.redirect('/orders')
    } catch (error) {
@@ -54,10 +56,21 @@ const putStatus = async (req, res, next) => {
    }
 }
 
+const putStatusDetails = async (req, res, next) => {
+   try {
+      const id = req.params.id
+      const status = req.body.changeStatus
+      await myModel.orderModel.findByIdAndUpdate({ _id: id }, { status })
+      return res.redirect(`/orders/${id}`)
+   } catch (error) {
+      console.log('Error PUT Status: ', error);
+   }
+}
 
 module.exports = {
    getListOrder,
    putStatus,
    getListFinished,
-   getOrderDetails
+   getOrderDetails,
+   putStatusDetails
 }

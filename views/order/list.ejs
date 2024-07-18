@@ -21,7 +21,7 @@
                   <form class="d-flex" action="" method="get">
                      <div class="form-outline" data-mdb-input-init>
                         <input type="search" id="form1" class="form-control" name="searchOrder" style="width: 200px;" />
-                        <label class="form-label" for="form1">Search</label>
+                        <label class="form-label" for="form1">Nhập tên khách hàng</label>
                      </div>
                      <button type="submit" class="btn btn-primary" style="z-index: 0;" data-mdb-ripple-init>
                         <i class="fas fa-search"></i>
@@ -136,7 +136,6 @@
                   <% }) %>
             </tbody>
          </table>
-
          <% if(listOrder.length==0){ %>
             <div class="text-center mt-4">
                <div>
@@ -146,28 +145,19 @@
                <h5 class="fw-semibold text-muted">Không có đơn hàng nào..</h5>
             </div>
             <% } %>
-
       </div>
 
    </div>
 
-
-
-
-
    <script>
       document.addEventListener('DOMContentLoaded', () => {
-         let orderId
          let btnUpdate = document.getElementById('btn-update-status')
          let updateForm = document.forms['updateStatus']
 
          btnUpdate.onclick = () => {
             updateForm.submit()
          }
-
       })
    </script>
-
-
 
    <%- include('../includes/footer.ejs') %>

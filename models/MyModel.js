@@ -86,8 +86,7 @@ const orderDetailsSchema = new db.mongoose.Schema(
 
 const addressSchema = new db.mongoose.Schema(
    {
-      userId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'userModel' },
-      type: { type: String, required: true },
+      userId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'userModel', required: true },
       street: { type: String, required: true },
       commune: { type: String, required: true },
       district: { type: String, required: true },
