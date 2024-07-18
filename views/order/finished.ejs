@@ -1,0 +1,107 @@
+<%- include('../includes/header.ejs') %>
+
+
+   <div class="container-fuild">
+
+      <div class="container col-9">
+         <h1 class="fw-semibold">Orders</h1>
+      </div>
+      <hr>
+
+
+
+      <div class="container col-8">
+
+         <div class="container d-flex align-items-center mb-2" style="justify-content: space-between;">
+            <div>
+               <a href="/orders/finished" class="btn text-white btn-primary" data-mdb-ripple-init>
+                  <i class="fas fa-refresh"></i>
+               </a>
+            </div>
+            <div class="d-flex">
+               <div class="input-group">
+                  <form class="d-flex" action="" method="get">
+                     <div class="form-outline" data-mdb-input-init>
+                        <input type="search" id="form1" class="form-control" name="searchOrder" style="width: 200px;" />
+                        <label class="form-label" for="form1">Search</label>
+                     </div>
+                     <button type="submit" class="btn btn-primary" style="z-index: 0;" data-mdb-ripple-init>
+                        <i class="fas fa-search"></i>
+                     </button>
+                  </form>
+               </div>
+            </div>
+         </div>
+
+
+
+         <table class="table table-hover table-bordered table-sm align-middle mb-0 bg-white">
+            <thead class="bg-light">
+               <tr class="table-secondary">
+                  <th scope="col" style="font-size: 15px;">#</th>
+                  <th scope="col" style="font-size: 15px;">User</th>
+                  <th scope="col" style="font-size: 15px;">Date</th>
+                  <th scope="col" style="font-size: 15px;">Payment</th>
+                  <th scope="col" style="font-size: 15px;">Status</th>
+                  <th scope="col" style="font-size: 15px;">Total</th>
+               </tr>
+            </thead>
+            <tbody>
+               <% listOrder.forEach((item,index)=>{ %>
+                  <tr style="cursor: pointer;">
+                     <td>
+                        <a class="text-black" href="/orders/<%= item._id %>">
+                           <%= index + 1 %>
+                        </a>
+                     </td>
+                     <td>
+                        <a class="text-black" href="/orders/<%= item._id %>">
+                           <%= item.userId.name %>
+                        </a>
+                     </td>
+                     <td>
+                        <a class="text-black" href="/orders/<%= item._id %>">
+                           <%= item.date %>
+                        </a>
+                     </td>
+                     <td>
+                        <a class="text-black" href="/orders/<%= item._id %>">
+                           <%= item.paymentMethod %>
+                        </a>
+                     </td>
+                     <td>
+                        <a class="text-black" href="/orders/<%= item._id %>">
+                           <span class="badge badge-success rounded-pill d-inline">
+                              <%= item.status %>
+                           </span>
+                        </a>
+                     </td>
+                     <td>
+                        <a class="text-black" href="/orders/<%= item._id %>">
+                           <%= item.total.toLocaleString() %>₫
+                        </a>
+                     </td>
+                  </tr>
+                  <% }) %>
+            </tbody>
+         </table>
+
+         <% if(listOrder.length==0){ %>
+            <div class="text-center mt-4">
+               <div>
+                  <img src="https://img.icons8.com/color/96/general-warning-sign.png" class="img rounded"
+                     style="width: 80px; height: 80px;" alt="">
+               </div>
+               <h5 class="fw-semibold text-muted">Không có đơn hàng nào..</h5>
+            </div>
+            <% } %>
+      </div>
+
+   </div>
+
+
+
+
+
+
+   <%- include('../includes/footer.ejs') %>

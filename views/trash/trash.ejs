@@ -6,8 +6,8 @@
    </div>
    <hr>
 
-   <div class="container col-9">
-      <table class="table table-hover align-middle mb-0 bg-white">
+   <div class="container col-8">
+      <table class="table table-hover table-sm align-middle mb-0 bg-white">
          <thead class="bg-light">
             <tr class="table-danger">
                <th></th>
@@ -29,19 +29,13 @@
                      </div>
                   </td>
                   <td>
-                     <p class="fw-normal">
-                        <%= item.name %>
-                     </p>
+                     <%= item.name %>
                   </td>
                   <td>
-                     <p class="fw-normal">
-                        <%= item.price.toLocaleString() %>₫
-                     </p>
+                     <%= item.price.toLocaleString() %>₫
                   </td>
                   <td>
-                     <p class="fw-normal">
-                        <%= item.category.name %>
-                     </p>
+                     <%= item.category.name %>
                   </td>
                   <td>
                      <a class="btn text-white btn-sm btn-floating bg-primary" id="btn-restore" data-mdb-ripple-init
@@ -59,8 +53,12 @@
          </tbody>
       </table>
       <% if(listProd.length==0){ %>
-         <div class="text-center mt-3">
-            <h5 class="fw-semibold">Thùng rác trống..</h5>
+         <div class="text-center mt-4">
+            <div>
+               <img src="https://img.icons8.com/color/96/general-warning-sign.png" class="img rounded"
+                  style="width: 80px; height: 80px;" alt="">
+            </div>
+            <h5 class="fw-semibold text-muted">Thùng rác trống..</h5>
             <h6><a class="fw-semi" href="/products">Danh sách sản phẩm</a></h6>
          </div>
          <% } %>

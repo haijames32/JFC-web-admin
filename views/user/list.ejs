@@ -81,6 +81,15 @@
                   <% }) %>
             </tbody>
          </table>
+         <% if(listUser.length==0){ %>
+            <div class="text-center mt-4">
+               <div>
+                  <img src="https://img.icons8.com/color/96/general-warning-sign.png" class="img rounded"
+                     style="width: 80px; height: 80px;" alt="">
+               </div>
+               <h5 class="fw-semibold text-muted">Không có người dùng nào..</h5>
+            </div>
+            <% } %>
       </div>
 
    </div>

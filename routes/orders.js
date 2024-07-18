@@ -5,8 +5,8 @@ const orderCtrl = require('../controllers/orderController')
 
 
 router.get('/', orderCtrl.getListOrder)
-router.get('/:id', orderCtrl.getOrderDetails)
 router.get('/finished', orderCtrl.getListFinished)
+router.get('/:id', orderCtrl.getOrderDetails)
 router.put('/:id/status', orderCtrl.putStatus)
 
 

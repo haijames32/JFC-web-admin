@@ -17,10 +17,10 @@
                </a>
             </div>
             <div class="d-flex">
-               <div class="input-group">
+               <div class="input-group me-3">
                   <form class="d-flex" action="" method="get">
                      <div class="form-outline" data-mdb-input-init>
-                        <input type="search" id="form1" class="form-control" name="searchUser" style="width: 200px;" />
+                        <input type="search" id="form1" class="form-control" name="searchOrder" style="width: 200px;" />
                         <label class="form-label" for="form1">Search</label>
                      </div>
                      <button type="submit" class="btn btn-primary" style="z-index: 0;" data-mdb-ripple-init>
@@ -28,6 +28,9 @@
                      </button>
                   </form>
                </div>
+               <a href="/orders/finished" class="btn text-white btn-primary" data-mdb-ripple-init>
+                  <i class="fas fa-history"></i>
+               </a>
             </div>
          </div>
 
@@ -47,51 +50,62 @@
                <% listOrder.forEach((item, index)=>{ %>
                   <tr style="cursor: pointer;">
                      <td>
-                        <%= index + 1 %>
+                        <a class="text-black" href="/orders/<%= item._id %>">
+                           <%= index + 1 %>
+                        </a>
                      </td>
                      <td>
-                        <%= item.userId.name %>
+                        <a class="text-black" href="/orders/<%= item._id %>">
+                           <%= item.userId.name %>
+                        </a>
                      </td>
                      <td>
-                        <%= item.date %>
+                        <a class="text-black" href="/orders/<%= item._id %>">
+                           <%= item.date %>
+                        </a>
                      </td>
                      <td>
-                        <%= item.paymentMethod %>
+                        <a class="text-black" href="/orders/<%= item._id %>">
+                           <%= item.paymentMethod %>
+                        </a>
                      </td>
                      <td>
-                        <% if(item.status=='Hoàn thành' ){ %>
-                           <span class="badge badge-success rounded-pill d-inline">
-                              <%= item.status %>
-                           </span>
-                           <% }else if(item.status=='Đã nhận hàng' ){ %>
-                              <span class="badge badge-primary rounded-pill d-inline">
+                        <a class="text-black" href="/orders/<%= item._id %>">
+                           <% if(item.status=='Hoàn thành' ){ %>
+                              <span class="badge badge-success rounded-pill d-inline">
                                  <%= item.status %>
                               </span>
-                              <% }else if(item.status=='Đang giao hàng' ){%>
-                                 <span class="badge badge-info rounded-pill d-inline">
+                              <% }else if(item.status=='Đã nhận hàng' ){ %>
+                                 <span class="badge badge-primary rounded-pill d-inline">
                                     <%= item.status %>
                                  </span>
-                                 <% }else if(item.status=='Đã xác nhận' ){%>
-                                    <span class="badge badge-primary rounded-pill d-inline">
+                                 <% }else if(item.status=='Đang giao hàng' ){%>
+                                    <span class="badge badge-info rounded-pill d-inline">
                                        <%= item.status %>
                                     </span>
-                                    <% }else if(item.status=='Chờ xác nhận' ){ %>
-                                       <span class="badge badge-warning rounded-pill d-inline">
+                                    <% }else if(item.status=='Đã xác nhận' ){%>
+                                       <span class="badge badge-primary rounded-pill d-inline">
                                           <%= item.status %>
                                        </span>
-                                       <%}else if(item.status=='Đã thanh toán và chờ xác nhận' ){%>
+                                       <% }else if(item.status=='Chờ xác nhận' ){ %>
                                           <span class="badge badge-warning rounded-pill d-inline">
                                              <%= item.status %>
                                           </span>
-                                          <%}else{%>
-                                             <span class="badge badge-danger rounded-pill d-inline">
+                                          <%}else if(item.status=='Đã thanh toán và chờ xác nhận' ){%>
+                                             <span class="badge badge-warning rounded-pill d-inline">
                                                 <%= item.status %>
                                              </span>
-                                             <% } %>
-
+                                             <%}else{%>
+                                                <span class="badge badge-danger rounded-pill d-inline">
+                                                   <%= item.status %>
+                                                </span>
+                                                <% } %>
+                        </a>
                      </td>
                      <td>
-                        <%= item.total.toLocaleString() %>₫
+                        <a class="text-black" href="/orders/<%= item._id %>">
+                           <%= item.total.toLocaleString() %>₫
+                        </a>
                      </td>
                      <td>
                         <% if(item.status=='Chờ xác nhận' || item.status=='Đã thanh toán và chờ xác nhận' ){%>
@@ -104,24 +118,34 @@
                               <form method="post" action="/orders/<%= item._id %>/status?_method=PUT"
                                  name="updateStatus">
                                  <input name="changeStatus" value="delivering" hidden>
-                                 <button type="button" id="btn-update-status" class="btn btn-sm btn-primary btn-rounded"
-                                    data-mdb-ripple-init>Bắt đầu giao</button>
+                                 <button type="button" id="btn-update-status" class="btn btn-sm btn-info btn-rounded"
+                                    data-mdb-ripple-init>Bắt đầu
+                                    giao</button>
                               </form>
                               <% }else if(item.status=='Đã nhận hàng' ){ %>
                                  <form method="post" action="/orders/<%= item._id %>/status?_method=PUT"
                                     name="updateStatus">
                                     <input name="changeStatus" value="finish" hidden>
                                     <button type="button" id="btn-update-status"
-                                       class="btn btn-sm btn-primary btn-rounded" data-mdb-ripple-init>Hoàn
+                                       class="btn btn-sm btn-success btn-rounded" data-mdb-ripple-init>Hoàn
                                        thành</button>
                                  </form>
                                  <% }else{ null } %>
                      </td>
                   </tr>
-
                   <% }) %>
             </tbody>
          </table>
+
+         <% if(listOrder.length==0){ %>
+            <div class="text-center mt-4">
+               <div>
+                  <img src="https://img.icons8.com/color/96/general-warning-sign.png" class="img rounded"
+                     style="width: 80px; height: 80px;" alt="">
+               </div>
+               <h5 class="fw-semibold text-muted">Không có đơn hàng nào..</h5>
+            </div>
+            <% } %>
 
       </div>
 
