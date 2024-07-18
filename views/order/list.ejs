@@ -59,7 +59,7 @@
                         <%= item.paymentMethod %>
                      </td>
                      <td>
-                        <% if(item.status=='Đã hoàn thành' ){ %>
+                        <% if(item.status=='Hoàn thành' ){ %>
                            <span class="badge badge-success rounded-pill d-inline">
                               <%= item.status %>
                            </span>
@@ -94,14 +94,31 @@
                         <%= item.total.toLocaleString() %>₫
                      </td>
                      <td>
-                        <!-- <a href="/users/<%= item._id %>" class="btn btn-link btn-rounded btn-sm fw-semibold"
-                           data-mdb-ripple-color="dark">
-                           Details
-                        </a> -->
-                        <button type="button" class="btn btn-sm btn-primary btn-rounded"
-                           data-mdb-ripple-init>Primary</button>
+                        <% if(item.status=='Chờ xác nhận' || item.status=='Đã thanh toán và chờ xác nhận' ){%>
+                           <form method="post" action="/orders/<%= item._id %>/status?_method=PUT" name="updateStatus">
+                              <input name="changeStatus" value="confirm" hidden>
+                              <button type="button" id="btn-update-status" class="btn btn-sm btn-primary btn-rounded"
+                                 data-mdb-ripple-init>Xác nhận</button>
+                           </form>
+                           <% }else if(item.status=='Đã xác nhận' ){ %>
+                              <form method="post" action="/orders/<%= item._id %>/status?_method=PUT"
+                                 name="updateStatus">
+                                 <input name="changeStatus" value="delivering" hidden>
+                                 <button type="button" id="btn-update-status" class="btn btn-sm btn-primary btn-rounded"
+                                    data-mdb-ripple-init>Bắt đầu giao</button>
+                              </form>
+                              <% }else if(item.status=='Đã nhận hàng' ){ %>
+                                 <form method="post" action="/orders/<%= item._id %>/status?_method=PUT"
+                                    name="updateStatus">
+                                    <input name="changeStatus" value="finish" hidden>
+                                    <button type="button" id="btn-update-status"
+                                       class="btn btn-sm btn-primary btn-rounded" data-mdb-ripple-init>Hoàn
+                                       thành</button>
+                                 </form>
+                                 <% }else{ null } %>
                      </td>
                   </tr>
+
                   <% }) %>
             </tbody>
          </table>
@@ -109,6 +126,23 @@
       </div>
 
    </div>
+
+
+
+
+
+   <script>
+      document.addEventListener('DOMContentLoaded', () => {
+         let orderId
+         let btnUpdate = document.getElementById('btn-update-status')
+         let updateForm = document.forms['updateStatus']
+
+         btnUpdate.onclick = () => {
+            updateForm.submit()
+         }
+
+      })
+   </script>
 
 
 
