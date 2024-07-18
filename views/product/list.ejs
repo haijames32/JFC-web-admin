@@ -119,9 +119,7 @@
                <% listProd.forEach((item,index)=>{ %>
                   <tr>
                      <td>
-                        <p class="fw-normal">
-                           <%= index + 1 %>
-                        </p>
+                        <%= index + 1 %>
                      </td>
                      <td>
                         <div class="align-items-center">
@@ -129,19 +127,13 @@
                         </div>
                      </td>
                      <td>
-                        <p class="fw-normal">
-                           <%= item.name %>
-                        </p>
+                        <%= item.name %>
                      </td>
                      <td>
-                        <p class="fw-normal">
-                           <%= item.price.toLocaleString() %>₫
-                        </p>
+                        <%= item.price.toLocaleString() %>₫
                      </td>
                      <td>
-                        <p class="fw-normal">
-                           <%= item.category.name %>
-                        </p>
+                        <%= item.category.name %>
                      </td>
                      <td>
                         <a class="btn text-white btn-sm btn-floating bg-primary" href="/products/<%= item._id %>/edit"

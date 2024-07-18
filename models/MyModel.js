@@ -10,7 +10,6 @@ const userSchema = new db.mongoose.Schema(
       passwd: { type: String, required: true },
       dateOfBirth: { type: String, required: true },
       addressDefault: { type: db.mongoose.Schema.Types.ObjectId, ref: 'addressModel', required: false },
-
    },
    {
       collection: 'user',
@@ -59,7 +58,7 @@ const cartSchema = new db.mongoose.Schema(
 
 const orderSchema = new db.mongoose.Schema(
    {
-      userId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'userModel' },
+      userId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'userModel', required: true },
       date: { type: String, required: true },
       status: { type: String, required: true },
       paymentMethod: { type: String, required: true },
@@ -73,8 +72,8 @@ const orderSchema = new db.mongoose.Schema(
 
 const orderDetailsSchema = new db.mongoose.Schema(
    {
-      orderId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'orderModel' },
-      productId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'productModel' },
+      orderId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'orderModel', required: true },
+      productId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'productModel', required: true },
       priceOfItem: { type: Number, required: true },
       numOfItem: { type: Number, required: true },
       totalOfItem: { type: Number, required: true },
