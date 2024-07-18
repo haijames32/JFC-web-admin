@@ -23,8 +23,10 @@ const getListProd = async (req, res, next) => {
 
    // Search by Name
    const search = req.query.searchName
-   if (search) finder = { name: { $regex: '.*' + search + '.*' } }
-
+   if (search) {
+      const regex = new RegExp('.*' + search + '.*', 'i');
+      finder = { name: { $regex: regex } }
+   }
 
    //Skip Product
    let skipProd = 0
