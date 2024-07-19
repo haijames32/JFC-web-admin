@@ -9,6 +9,7 @@ const userSchema = new db.mongoose.Schema(
       phone: { type: Number, required: true },
       passwd: { type: String, required: true },
       dateOfBirth: { type: String, required: true },
+      gender: { type: String, required: false },
       addressDefault: { type: db.mongoose.Schema.Types.ObjectId, ref: 'addressModel', required: false },
    },
    {
