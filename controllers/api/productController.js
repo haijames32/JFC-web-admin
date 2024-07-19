@@ -10,8 +10,14 @@ const listProdByCategory = async (req, res, next) => {
    res.status(200).json({ data: listProd })
 }
 
+const productDetails = async (req, res, next) => {
+   const product = await myModel.productModel.findById({ _id: req.params.id }).populate('category')
+   res.status(200).json({ data: product })
+}
+
 
 module.exports = {
    listCategory,
-   listProdByCategory
+   listProdByCategory,
+   productDetails
 }

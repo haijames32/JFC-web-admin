@@ -12,6 +12,7 @@ router.post('/register', userCtrl.register)
 
 router.get('/category', prodCtrl.listCategory)
 router.get('/category/:id', prodCtrl.listProdByCategory)
+router.get('/product/:id', prodCtrl.productDetails)
 
 
 module.exports = router
