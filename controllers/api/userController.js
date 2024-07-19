@@ -7,11 +7,11 @@ const login = async (req, res, next) => {
       if (user) {
          const check = checkHashedPassword(req.body.passwd, user.passwd)
          if (check)
-            res.status(200).json({ message: 'Đăng nhập thành công.', data: user })
+            res.status(200).json({ message: 'Đăng nhập thành công', data: user })
          else
-            res.status(400).json({ message: 'Không đúng mật khẩu.' })
+            res.status(400).json({ message: 'Không đúng mật khẩu' })
       } else {
-         res.status(400).json({ message: 'Tài khoản không tồn tại.' })
+         res.status(400).json({ message: 'Tài khoản không tồn tại' })
       }
    } catch (error) {
       console.log('Error Login: ', error);
@@ -33,7 +33,7 @@ const register = async (req, res, next) => {
       const pw = hashPassword(passwd)
       const user = await myModel.userModel.findOne({ username: username })
       if (user) {
-         res.status(400).json({ message: 'Tài khoản đã tồn tại.' })
+         res.status(400).json({ message: 'Tài khoản đã tồn tại' })
       } else {
          const body = new myModel.userModel({
             name,
@@ -45,7 +45,7 @@ const register = async (req, res, next) => {
             gender: gender ?? 'None',
          })
          const newUser = await body.save()
-         res.status(200).json({ message: 'Đăng ký thành công.', data: newUser })
+         res.status(200).json({ message: 'Đăng ký thành công', data: newUser })
       }
    } catch (error) {
       console.log('Error Register: ', error);
@@ -71,16 +71,44 @@ const editProfile = async (req, res, next) => {
          gender,
       }
       await myModel.userModel.findByIdAndUpdate({ _id: id }, body)
-      res.status(200).json({ message: 'Cập nhật thành công.', data: body })
+      res.status(200).json({ message: 'Cập nhật thành công', data: body })
    } catch (error) {
       console.log('Error edit: ', error)
       res.status(400).json({ message: error })
    }
 }
 
+const changePassword = async (req, res, next) => {
+   try {
+      const id = req.params.id
+      const {
+         oldPasswd,
+         newPasswd,
+         confirmNewPasswd
+      } = req.body
+      const user = await myModel.userModel.findById({ _id: id })
+      const check = checkHashedPassword(oldPasswd, user.passwd)
+      if (check) {
+         if (newPasswd !== confirmNewPasswd) {
+            res.status(400).json({ message: 'Xác nhận mật khẩu phải trùng mật khẩu mới' })
+         } else {
+            const hashPw = hashPassword(newPasswd)
+            await myModel.userModel.findByIdAndUpdate({ _id: id }, { passwd: hashPw })
+            res.status(200).json({ message: 'Đổi mật khẩu thành công', data: hashPw })
+         }
+      } else {
+         res.status(400).json({ message: 'Sai mật khẩu cũ' })
+      }
+   } catch (error) {
+      console.log('Error :', error);
+   }
+}
+
+
 module.exports = {
    login,
    register,
    getProfile,
    editProfile,
+   changePassword
 }
