@@ -10,6 +10,9 @@ router.use(bodyParser.json());
 router.post('/login', userCtrl.login)
 router.post('/register', userCtrl.register)
 
+router.get('/user/:id', userCtrl.getProfile)
+router.put('/user/:id', userCtrl.editProfile)
+
 router.get('/category', prodCtrl.listCategory)
 router.get('/category/:id', prodCtrl.listProdByCategory)
 router.get('/product/:id', prodCtrl.productDetails)

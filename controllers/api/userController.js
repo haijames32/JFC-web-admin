@@ -28,6 +28,7 @@ const register = async (req, res, next) => {
          phone,
          passwd,
          dateOfBirth,
+         gender,
       } = req.body
       const pw = hashPassword(passwd)
       const user = await myModel.userModel.findOne({ username: username })
@@ -41,6 +42,7 @@ const register = async (req, res, next) => {
             phone,
             passwd: pw,
             dateOfBirth,
+            gender: gender ?? 'None',
          })
          const newUser = await body.save()
          res.status(200).json({ message: 'Đăng ký thành công.', data: newUser })
@@ -51,8 +53,34 @@ const register = async (req, res, next) => {
    }
 }
 
+const getProfile = async (req, res, next) => {
+   const user = await myModel.userModel.findById({ _id: req.params.id })
+   res.status(200).json({ data: user })
+}
+
+const editProfile = async (req, res, next) => {
+   try {
+      const id = req.params.id
+      const { name, username, email, phone, gender, dateOfBirth } = req.body
+      const body = {
+         name,
+         username,
+         email,
+         phone,
+         dateOfBirth,
+         gender,
+      }
+      await myModel.userModel.findByIdAndUpdate({ _id: id }, body)
+      res.status(200).json({ message: 'Cập nhật thành công.', data: body })
+   } catch (error) {
+      console.log('Error edit: ', error)
+      res.status(400).json({ message: error })
+   }
+}
 
 module.exports = {
    login,
-   register
+   register,
+   getProfile,
+   editProfile,
 }
