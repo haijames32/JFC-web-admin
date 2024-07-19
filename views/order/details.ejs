@@ -1,0 +1,149 @@
+<%- include('../includes/header.ejs') %>
+
+
+   <div class="container-fuild" style="background-color: rgb(246, 246, 246); height: 677px;">
+
+      <div class="container col-9" style="margin-top: 70px;">
+         <h1 class="fw-semibold">Details</h1>
+      </div>
+      <hr>
+
+      <div class="container col-9 rounded border bg-white p-4">
+
+         <div class="col-12 text-end pe-4">
+            <% if(order.status=='Chờ xác nhận' || order.status=='Đã thanh toán và chờ xác nhận' ){%>
+               <form method="post" action="/orders/<%= order._id %>/details/status?_method=PUT" name="updateStatus">
+                  <input name="changeStatus" value="Đã xác nhận" hidden>
+                  <button type="button" class="btn btn-primary" id="btn-update-status" data-mdb-ripple-init>Xác
+                     nhận</button>
+               </form>
+               <% }else if(order.status=='Đã xác nhận' ){%>
+                  <form method="post" action="/orders/<%= order._id %>/details/status?_method=PUT" name="updateStatus">
+                     <input name="changeStatus" value="Đang giao hàng" hidden>
+                     <button type="button" class="btn btn-primary" id="btn-update-status" data-mdb-ripple-init>Bắt
+                        đầu giao</button>
+                  </form>
+                  <%}else if(order.status=='Đã nhận hàng' ){%>
+                     <form method="post" action="/orders/<%= order._id %>/details/status?_method=PUT"
+                        name="updateStatus">
+                        <input name="changeStatus" value="Hoàn thành" hidden>
+                        <button type="button" class="btn btn-primary" id="btn-update-status" data-mdb-ripple-init>Hoàn
+                           thành</button>
+                     </form>
+                     <%}else{ null } %>
+         </div>
+
+         <div class="d-flex col-12">
+
+            <div class="col-4 p-3">
+               <h6 class="fw-semibold mb-3">Thông tin khách hàng</h6>
+               <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="text" id="form2Example1" class="form-control bg-white" value="<%= order.userId.name %>"
+                     readonly />
+                  <label class="form-label" for="form2Example1">Name</label>
+               </div>
+               <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="text" id="form2Example1" class="form-control bg-white" value="0<%= order.userId.phone %>"
+                     readonly />
+                  <label class="form-label" for="form2Example1">Phone</label>
+               </div>
+               <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="email" id="form2Example1" class="form-control bg-white" value="<%= order.userId.email %>"
+                     readonly />
+                  <label class="form-label" for="form2Example1">Email</label>
+               </div>
+               <div data-mdb-input-init class="form-outline mb-4">
+                  <textarea class="form-control bg-white" id="form4Example3" rows="2" readonly><%= address %></textarea>
+                  <label class="form-label" for="form4Example3">Address</label>
+               </div>
+            </div>
+
+            <div class="col-4 p-3">
+               <h6 class="fw-semibold mb-3">Thông tin đơn hàng</h6>
+               <div data-mdb-input-init class="form-outline mb-4">
+                  <% if(order.status=='Hoàn thành' ){ %>
+                     <input type="text" id="form2Example1" class="form-control bg-white text-success"
+                        value="<%= order.status %>" readonly />
+                     <%}else if(order.status=='Đã nhận hàng' ){%>
+                        <input type="text" id="form2Example1" class="form-control bg-white text-primary"
+                           value="<%= order.status %>" readonly />
+                        <%}else if(order.status=='Đang giao hàng' ){%>
+                           <input type="text" id="form2Example1" class="form-control bg-white text-info"
+                              value="<%= order.status %>" readonly />
+                           <%}else if(order.status=='Đã xác nhận' ){%>
+                              <input type="text" id="form2Example1" class="form-control bg-white text-primary"
+                                 value="<%= order.status %>" readonly />
+                              <%}else if(order.status=='Chờ xác nhận' ){%>
+                                 <input type="text" id="form2Example1" class="form-control bg-white text-warning"
+                                    value="<%= order.status %>" readonly />
+                                 <%}else if(order.status=='Đã thanh toán và chờ xác nhận' ){%>
+                                    <input type="text" id="form2Example1" class="form-control bg-white text-warning"
+                                       value="<%= order.status %>" readonly />
+                                    <%}else{%>
+                                       <input type="text" id="form2Example1" class="form-control bg-white text-danger"
+                                          value="<%= order.status %>" readonly />
+                                       <%} %>
+                                          <label class="form-label" for="form2Example1">Status</label>
+               </div>
+               <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="text" id="form2Example1" class="form-control bg-white" value="<%= order.date %>"
+                     readonly />
+                  <label class="form-label" for="form2Example1">Date</label>
+               </div>
+               <div data-mdb-input-init class="form-outline mb-4">
+                  <input type="text" id="form2Example1" class="form-control bg-white" value="<%= order.paymentMethod %>"
+                     readonly />
+                  <label class="form-label" for="form2Example1">Payment Method</label>
+               </div>
+            </div>
+
+            <div class="col-4 p-3">
+               <h6 class="fw-semibold mb-3">Thông tin sản phẩm</h6>
+               <div>
+                  <% orderDetails.forEach((item)=>{%>
+                     <div class="d-flex border rounded mb-2">
+                        <div>
+                           <img src="<%= item.productId.image %>" class="rounded border-end" width="80px" height="80px"
+                              alt="">
+                        </div>
+                        <div class="ps-2 pe-2 col" style="flex: 1;">
+                           <div>
+                              <%= item.productId.name %>
+                           </div>
+                           <div class="text-muted" style="font-size: 14px;">
+                              x<%= item.numOfItem %>
+                           </div>
+                           <div class="d-flex" style="justify-content: space-between; align-items: center;">
+                              <div>
+                                 <%= item.priceOfItem %>₫
+                              </div>
+                              <div class="d-flex" style="align-items: center;">
+                                 <div>Tổng:</div>
+                                 <div class="fw-bold ms-1 text-danger fs-5">
+                                    <%= item.totalOfItem %>₫
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <% }) %>
+               </div>
+            </div>
+
+         </div>
+      </div>
+   </div>
+
+   <script>
+      document.addEventListener('DOMContentLoaded', () => {
+         let btnUpdate = document.getElementById('btn-update-status')
+         let updateForm = document.forms['updateStatus']
+
+         btnUpdate.onclick = () => {
+            updateForm.submit()
+         }
+      })
+   </script>
+
+
+   <%- include('../includes/footer.ejs') %>

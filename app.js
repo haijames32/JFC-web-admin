@@ -9,6 +9,7 @@ var methodOverride = require('method-override')
 var mainRouter = require('./routes/main');
 var usersRouter = require('./routes/users');
 var productsRouter = require('./routes/products');
+var ordersRouter = require('./routes/orders');
 var trashRouter = require('./routes/trash');
 var apiRouter = require('./routes/api');
 
@@ -30,6 +31,7 @@ app.use(methodOverride('_method'))
 app.use('/', mainRouter);
 app.use('/users', usersRouter);
 app.use('/products', productsRouter);
+app.use('/orders', ordersRouter);
 app.use('/trash', trashRouter);
 app.use('/api', apiRouter);
 

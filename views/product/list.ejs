@@ -30,7 +30,7 @@
 
    <hr>
 
-   <div class="container col-9">
+   <div class="container col-8">
       <div class="d-flex mb-3">
          <div class="container d-flex align-items-center" style="justify-content: space-between;">
             <div class="d-flex col me-3" style="justify-content: space-between;">
@@ -119,9 +119,7 @@
                <% listProd.forEach((item,index)=>{ %>
                   <tr>
                      <td>
-                        <p class="fw-normal">
-                           <%= index + 1 %>
-                        </p>
+                        <%= index + 1 %>
                      </td>
                      <td>
                         <div class="align-items-center">
@@ -129,19 +127,13 @@
                         </div>
                      </td>
                      <td>
-                        <p class="fw-normal">
-                           <%= item.name %>
-                        </p>
+                        <%= item.name %>
                      </td>
                      <td>
-                        <p class="fw-normal">
-                           <%= item.price.toLocaleString() %>₫
-                        </p>
+                        <%= item.price.toLocaleString() %>₫
                      </td>
                      <td>
-                        <p class="fw-normal">
-                           <%= item.category.name %>
-                        </p>
+                        <%= item.category.name %>
                      </td>
                      <td>
                         <a class="btn text-white btn-sm btn-floating bg-primary" href="/products/<%= item._id %>/edit"
@@ -159,8 +151,12 @@
             </tbody>
          </table>
          <% if(listProd.length==0){ %>
-            <div class="text-center mt-3">
-               <h5 class="fw-semibold">Chưa có sản phẩm nào..</h5>
+            <div class="text-center mt-4">
+               <div>
+                  <img src="https://img.icons8.com/color/96/general-warning-sign.png" class="img rounded"
+                     style="width: 80px; height: 80px;" alt="">
+               </div>
+               <h5 class="fw-semibold text-muted">Không có sản phẩm nào..</h5>
             </div>
             <% } %>
 
