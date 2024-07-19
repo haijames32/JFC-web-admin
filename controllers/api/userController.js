@@ -1,4 +1,5 @@
 const myModel = require('../../models/MyModel')
+const { hashPassword, checkHashedPassword } = require('../../services/userService')
 
 const login = async (req, res, next) => {
    try {
@@ -14,10 +15,44 @@ const login = async (req, res, next) => {
       }
    } catch (error) {
       console.log('Error Login: ', error);
+      res.status(400).json({ message: error })
+   }
+}
+
+const register = async (req, res, next) => {
+   try {
+      const {
+         name,
+         username,
+         email,
+         phone,
+         passwd,
+         dateOfBirth,
+      } = req.body
+      const pw = hashPassword(passwd)
+      const user = await myModel.userModel.findOne({ username: username })
+      if (user) {
+         res.status(400).json({ message: 'Tài khoản đã tồn tại.' })
+      } else {
+         const body = new myModel.userModel({
+            name,
+            username,
+            email,
+            phone,
+            passwd: pw,
+            dateOfBirth,
+         })
+         const newUser = await body.save()
+         res.status(200).json({ message: 'Đăng ký thành công.', data: newUser })
+      }
+   } catch (error) {
+      console.log('Error Register: ', error);
+      res.status(400).json({ message: error })
    }
 }
 
 
 module.exports = {
    login,
+   register
 }
