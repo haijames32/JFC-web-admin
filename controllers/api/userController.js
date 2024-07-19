@@ -4,9 +4,9 @@ const { hashPassword, checkHashedPassword } = require('../../services/userServic
 const login = async (req, res, next) => {
    try {
       const user = await myModel.userModel.findOne({ username: req.body.username }).populate('addressDefault')
-      console.log(user);
       if (user) {
-         if (user.passwd == req.body.passwd)
+         const check = checkHashedPassword(req.body.passwd, user.passwd)
+         if (check)
             res.status(200).json({ message: 'Đăng nhập thành công.', data: user })
          else
             res.status(400).json({ message: 'Không đúng mật khẩu.' })
