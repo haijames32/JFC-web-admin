@@ -46,8 +46,8 @@ const categorySchema = new db.mongoose.Schema(
 
 const cartSchema = new db.mongoose.Schema(
    {
-      productId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'productModel' },
-      userId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'userModel' },
+      productId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'productModel', required: true },
+      userId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'userModel', required: true },
       numOfProduct: { type: Number, required: true },
       total: { type: Number, required: true },
    },
