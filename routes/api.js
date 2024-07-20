@@ -30,7 +30,8 @@ router.get('/users/cart/:id', cartCtrl.getCartByUser)
 
 // Order
 router.get('/users/order/:id', orderCtrl.getOrderByUser)
-router.get('/order/:id', orderCtrl.getOrderDetails)
+router.get('/users/order/details/:id', orderCtrl.getOrderDetails)
+router.post('/users/order', orderCtrl.postOrder)
 
 
 module.exports = router
