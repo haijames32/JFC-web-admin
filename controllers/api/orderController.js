@@ -54,6 +54,8 @@ const postOrder = async (req, res, next) => {
             totalOfItem: item.totalOfItem
          })
          await createItem.save()
+         // Delete products in the Cart after create Order
+         await myModel.cartModel.findOneAndDelete({ userId }, { productId: item.productId })
       }
       res.status(200).json({ data: newOrder })
    } catch (error) {
