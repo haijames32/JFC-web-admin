@@ -22,7 +22,7 @@ const getOrderDetails = async (req, res, next) => {
 
 const postOrder = async (req, res, next) => {
    try {
-      let status = '', totalOfItem = [], totalOfOrder = 0
+      let status = '', totalOfOrder = 0
       const {
          userId,
          paymentMethod,
@@ -34,20 +34,28 @@ const postOrder = async (req, res, next) => {
          case 'Thanh toán qua ZaloPay': status = 'Đã thanh toán và chờ xác nhận'; break
          default: status = 'None'; break
       }
-
-      Items.map((item, index) => {
-         totalOfItem = item.numOfItem * item.priceOfItem
+      for (const item of Items) {
+         totalOfOrder += item.totalOfItem
+      }
+      const createOrder = new myModel.orderModel({
+         userId,
+         date,
+         status,
+         paymentMethod,
+         total: totalOfOrder
       })
-
-      console.log(totalOfItem);
-      // const body = new myModel.orderModel({
-      //    userId,
-      //    date,
-      //    status
-
-      // })
-      // const newOrder = await body.save()
-
+      const newOrder = await createOrder.save()
+      for (const item of Items) {
+         const createItem = new myModel.orderDetailsModel({
+            orderId: newOrder.id,
+            productId: item.productId,
+            priceOfItem: item.priceOfItem,
+            numOfItem: item.numOfItem,
+            totalOfItem: item.totalOfItem
+         })
+         await createItem.save()
+      }
+      res.status(200).json({ data: newOrder })
    } catch (error) {
       console.log('Error Post Order: ', error);
       res.status(400).json({ message: error })
