@@ -7,7 +7,33 @@ const getCartByUser = async (req, res, next) => {
    res.status(200).json({ data: listCart })
 }
 
+const changeQuantity = async (req, res, next) => {
+   try {
+      const id = req.params.id
+      const cart = await myModel.cartModel.findById({ _id: id })
+      const body = req.body.quantity
+      let newQuantity
+      if (body) {
+         switch (body) {
+            case 'increase':
+               cart.numOfProduct += 1
+               break
+            case 'decrease':
+               cart.numOfProduct -= 1
+               break
+            default: null
+         }
+         newQuantity = await cart.save()
+      }
+      res.status(200).json({ data: newQuantity })
+   } catch (error) {
+      console.log('Error: ', error)
+      res.status(400).json({ message: error })
+   }
+}
+
 
 module.exports = {
    getCartByUser,
+   changeQuantity,
 }
