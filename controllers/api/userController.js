@@ -25,7 +25,7 @@ const register = async (req, res, next) => {
          name,
          username,
          email,
-         phone,
+         phoneNumber,
          passwd,
          dateOfBirth,
          gender,
@@ -39,7 +39,7 @@ const register = async (req, res, next) => {
             name,
             username,
             email,
-            phone,
+            phoneNumber,
             passwd: pw,
             dateOfBirth,
             gender: gender ?? 'None',
@@ -61,12 +61,12 @@ const getProfile = async (req, res, next) => {
 const editProfile = async (req, res, next) => {
    try {
       const id = req.params.id
-      const { name, username, email, phone, gender, dateOfBirth } = req.body
+      const { name, username, email, phoneNumber, gender, dateOfBirth } = req.body
       const body = {
          name,
          username,
          email,
-         phone,
+         phoneNumber,
          dateOfBirth,
          gender,
       }
@@ -104,11 +104,62 @@ const changePassword = async (req, res, next) => {
    }
 }
 
+const getAddressByUser = async (req, res, next) => {
+   const listAddress = await myModel.addressModel.find({ userId: req.params.id })
+   res.status(200).json({ data: listAddress })
+}
+
+const setAddressDefault = async (req, res, next) => {
+   try {
+      const { address } = req.body
+      const newAddress = await myModel.userModel.findByIdAndUpdate({ _id: req.params.id }, { addressDefault: address })
+      res.status(200).json({ data: newAddress })
+   } catch (error) {
+      console.log('Error: ', error);
+      res.status(400).json({ message: error.message })
+   }
+}
+
+const postAddress = async (req, res, next) => {
+   try {
+      const {
+         userId,
+         receiver,
+         phoneNumber,
+         street,
+         commune,
+         district,
+         city
+      } = req.body
+      if (phoneNumber.length < 10 || phoneNumber.length > 10) {
+         res.status(400).json({ message: 'Số điện thoại phải đủ 10 số' })
+         return
+      } else {
+         const createAddress = new myModel.addressModel({
+            userId,
+            receiver,
+            phoneNumber,
+            street,
+            commune,
+            district,
+            city
+         })
+         const newAddress = await createAddress.save()
+         res.status(200).json({ data: newAddress })
+      }
+   } catch (error) {
+      console.log('Error: ', error)
+      res.status(400).json({ message: error.message })
+   }
+}
 
 module.exports = {
    login,
    register,
    getProfile,
    editProfile,
-   changePassword
+   changePassword,
+   getAddressByUser,
+   setAddressDefault,
+   postAddress,
 }

@@ -6,7 +6,7 @@ const userSchema = new db.mongoose.Schema(
       name: { type: String, required: true },
       username: { type: String, required: true },
       email: { type: String, required: true },
-      phone: { type: Number, required: true },
+      phoneNumber: { type: Number, required: true },
       passwd: { type: String, required: true },
       dateOfBirth: { type: String, required: true },
       gender: { type: String, required: false },
@@ -88,6 +88,8 @@ const orderDetailsSchema = new db.mongoose.Schema(
 const addressSchema = new db.mongoose.Schema(
    {
       userId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'userModel', required: true },
+      receiver: { type: String, required: true },
+      phoneNumber: { type: String, required: true, minLength: 10, maxLength: 10 },
       street: { type: String, required: true },
       commune: { type: String, required: true },
       district: { type: String, required: true },
