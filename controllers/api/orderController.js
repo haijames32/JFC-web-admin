@@ -34,8 +34,12 @@ const postOrder = async (req, res, next) => {
          case 'Thanh toán qua ZaloPay': status = 'Đã thanh toán và chờ xác nhận'; break
          default: status = 'None'; break
       }
-      for (const item of Items) {
-         totalOfOrder += item.totalOfItem
+      if (Array.isArray(Items)) {
+         for (const item of Items) {
+            totalOfOrder += item.totalOfItem
+         }
+      } else {
+         totalOfOrder = Items.totalOfItem
       }
       const createOrder = new myModel.orderModel({
          userId,
@@ -45,19 +49,31 @@ const postOrder = async (req, res, next) => {
          total: totalOfOrder
       })
       const newOrder = await createOrder.save()
-      for (const item of Items) {
+      if (Array.isArray(Items)) {
+         for (const item of Items) {
+            const createItem = new myModel.orderDetailsModel({
+               orderId: newOrder.id,
+               productId: item.productId,
+               priceOfItem: item.priceOfItem,
+               numOfItem: item.numOfItem,
+               totalOfItem: item.totalOfItem
+            })
+            createItem.save()
+            // Delete products in the Cart after create Order
+            myModel.cartModel.findOneAndDelete({ userId }, { productId: item.productId })
+         }
+      } else {
          const createItem = new myModel.orderDetailsModel({
             orderId: newOrder.id,
-            productId: item.productId,
-            priceOfItem: item.priceOfItem,
-            numOfItem: item.numOfItem,
-            totalOfItem: item.totalOfItem
+            productId: Items.productId,
+            priceOfItem: Items.priceOfItem,
+            numOfItem: Items.numOfItem,
+            totalOfItem: Items.totalOfItem
          })
-         await createItem.save()
-         // Delete products in the Cart after create Order
-         await myModel.cartModel.findOneAndDelete({ userId }, { productId: item.productId })
+         createItem.save()
+         myModel.cartModel.findOneAndDelete({ userId }, { productId: Items.productId })
       }
-      res.status(200).json({ data: newOrder })
+      res.status(200).json({ item: newOrder })
    } catch (error) {
       console.log('Error Post Order: ', error);
       res.status(400).json({ message: error })

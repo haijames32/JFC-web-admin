@@ -12,7 +12,7 @@
 
          <div class="container d-flex align-items-center mb-2" style="justify-content: space-between;">
             <div>
-               <a href="/users" class="btn text-white btn-primary" data-mdb-ripple-init>
+               <a href="/orders" class="btn text-white btn-primary" data-mdb-ripple-init>
                   <i class="fas fa-refresh"></i>
                </a>
             </div>
@@ -20,7 +20,8 @@
                <div class="input-group me-3">
                   <form class="d-flex" action="" method="get">
                      <div class="form-outline" data-mdb-input-init>
-                        <input type="search" id="form1" class="form-control" name="searchOrder" style="width: 200px;" />
+                        <input type="search" id="form1" class="form-control" name="searchOrder" value="<%= search %>"
+                           style="width: 200px;" />
                         <label class="form-label" for="form1">Nhập tên khách hàng</label>
                      </div>
                      <button type="submit" class="btn btn-primary" style="z-index: 0;" data-mdb-ripple-init>
