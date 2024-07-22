@@ -2,14 +2,21 @@ const myModel = require('../models/MyModel')
 
 const getListOrder = async (req, res, next) => {
    let finder = null
+   let listOrder
+   let user
    // Search by Name user
    const search = req.query.searchOrder
    if (search) {
       const regex = new RegExp('.*' + search + '.*', 'i');
       finder = { name: { $regex: regex } }
+      user = await myModel.userModel.find(finder)
    }
-   const listOrder = await myModel.orderModel.find(finder).sort({ status: 1 }).populate('userId')
-   res.render('order/list', { listOrder })
+   if (user) {
+      listOrder = await myModel.orderModel.find({ userId: user }).sort({ date: 1 }).populate('userId')
+   } else {
+      listOrder = await myModel.orderModel.find({}).sort({ date: 1 }).populate('userId')
+   }
+   res.render('order/list', { listOrder, search })
 }
 
 const getOrderDetails = async (req, res, next) => {
@@ -30,7 +37,7 @@ const getOrderDetails = async (req, res, next) => {
       }
    }
    const orderDetails = await myModel.orderDetailsModel.find({ orderId: order._id }).populate('orderId').populate('productId')
-   res.render('order/details', { order, orderDetails, addressOfUser, address })
+   res.render('order/details', { order, orderDetails, address })
 }
 
 const getListFinished = async (req, res, next) => {
