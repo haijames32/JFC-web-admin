@@ -153,6 +153,16 @@ const postAddress = async (req, res, next) => {
    }
 }
 
+const deleteAddress = async (req, res, next) => {
+   try {
+      const address = await myModel.addressModel.findByIdAndDelete({ _id: req.params.id })
+      res.status(200).json({ data: address })
+   } catch (error) {
+      console.log('Error: ', error)
+      res.status(400).json({ message: error.message })
+   }
+}
+
 module.exports = {
    login,
    register,
@@ -162,4 +172,5 @@ module.exports = {
    getAddressByUser,
    setAddressDefault,
    postAddress,
+   deleteAddress,
 }
