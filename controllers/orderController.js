@@ -24,20 +24,13 @@ const getOrderDetails = async (req, res, next) => {
    const user = await myModel.userModel.findById({ _id: order.userId._id })
    const addressOfUser = await myModel.addressModel.findById({ _id: user.addressDefault })
    const { receiver, phoneNumber, street, commune, district, city } = addressOfUser
-   const iaddress = {
-      phoneNumber,
-      receiver,
-      street,
-      commune,
-      district,
-      city,
-   }
-   let address = ''
-   for (const property in iaddress) {
-      if (typeof iaddress[property] === 'string') {
-         address += iaddress[property] + ', ';
-      }
-   }
+   const address = `${receiver}, ${phoneNumber}.
+${street}, ${commune}, ${district}, ${city}.`
+   // for (const property in iaddress) {
+   //    if (typeof iaddress[property] === 'string') {
+   //       address += iaddress[property] + ', ';
+   //    }
+   // }
    const orderDetails = await myModel.orderDetailsModel.find({ orderId: order._id }).populate('orderId').populate('productId')
    res.render('order/details', { order, orderDetails, address })
 }
