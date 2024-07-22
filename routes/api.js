@@ -11,14 +11,14 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-// Login & Register
+// User
 router.post('/users/login', userCtrl.login)
 router.post('/users/register', userCtrl.register)
-
-// Profile
 router.get('/users/:id', userCtrl.getProfile)
 router.put('/users/:id', userCtrl.editProfile)
 router.patch('/users/changePassword/:id', userCtrl.changePassword)
+router.get('/users/address/:id', userCtrl.getAddressByUser)
+router.post('/users/address', userCtrl.postAddress)
 
 // Product
 router.get('/category', prodCtrl.listCategory)

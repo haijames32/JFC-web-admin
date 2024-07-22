@@ -12,9 +12,9 @@ const getListOrder = async (req, res, next) => {
       user = await myModel.userModel.find(finder)
    }
    if (user) {
-      listOrder = await myModel.orderModel.find({ userId: user }).sort({ date: 1 }).populate('userId')
+      listOrder = await myModel.orderModel.find({ userId: user }).sort({ date: -1 }).populate('userId')
    } else {
-      listOrder = await myModel.orderModel.find({}).sort({ date: 1 }).populate('userId')
+      listOrder = await myModel.orderModel.find({}).sort({ date: -1 }).populate('userId')
    }
    res.render('order/list', { listOrder, search })
 }
@@ -23,8 +23,10 @@ const getOrderDetails = async (req, res, next) => {
    const order = await myModel.orderModel.findById({ _id: req.params.id }).populate('userId')
    const user = await myModel.userModel.findById({ _id: order.userId._id })
    const addressOfUser = await myModel.addressModel.findById({ _id: user.addressDefault })
-   const { street, commune, district, city } = addressOfUser
+   const { receiver, phoneNumber, street, commune, district, city } = addressOfUser
    const iaddress = {
+      phoneNumber,
+      receiver,
       street,
       commune,
       district,
