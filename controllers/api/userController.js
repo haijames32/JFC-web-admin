@@ -109,13 +109,16 @@ const getAddressByUser = async (req, res, next) => {
    res.status(200).json({ data: listAddress })
 }
 
-// const setAddressDefault = async(req,res,next)=>{
-//    try {
-
-//    } catch (error) {
-
-//    }
-// }
+const setAddressDefault = async (req, res, next) => {
+   try {
+      const { address } = req.body
+      const newAddress = await myModel.userModel.findByIdAndUpdate({ _id: req.params.id }, { addressDefault: address })
+      res.status(200).json({ data: newAddress })
+   } catch (error) {
+      console.log('Error: ', error);
+      res.status(400).json({ message: error.message })
+   }
+}
 
 const postAddress = async (req, res, next) => {
    try {
@@ -157,5 +160,6 @@ module.exports = {
    editProfile,
    changePassword,
    getAddressByUser,
+   setAddressDefault,
    postAddress,
 }

@@ -19,6 +19,7 @@ router.put('/users/:id', userCtrl.editProfile)
 router.patch('/users/changePassword/:id', userCtrl.changePassword)
 router.get('/users/address/:id', userCtrl.getAddressByUser)
 router.post('/users/address', userCtrl.postAddress)
+router.patch('/users/setAddressDefault/:id', userCtrl.setAddressDefault)
 
 // Product
 router.get('/category', prodCtrl.listCategory)
