@@ -1,7 +1,7 @@
 const myModel = require('../../models/MyModel')
 const { hashPassword, checkHashedPassword } = require('../../services/userService')
 
-const login = async (req, res, next) => {
+const login = async (req, res) => {
    try {
       const user = await myModel.userModel.findOne({ username: req.body.username }).populate('addressDefault')
       if (user) {
@@ -15,11 +15,11 @@ const login = async (req, res, next) => {
       }
    } catch (error) {
       console.log('Error Login: ', error);
-      res.status(400).json({ message: error })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
-const register = async (req, res, next) => {
+const register = async (req, res) => {
    try {
       const {
          name,
@@ -49,16 +49,16 @@ const register = async (req, res, next) => {
       }
    } catch (error) {
       console.log('Error Register: ', error);
-      res.status(400).json({ message: error })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
-const getProfile = async (req, res, next) => {
+const getProfile = async (req, res) => {
    const user = await myModel.userModel.findById({ _id: req.params.id })
    res.status(200).json({ data: user })
 }
 
-const editProfile = async (req, res, next) => {
+const editProfile = async (req, res) => {
    try {
       const id = req.params.id
       const { name, username, email, phoneNumber, gender, dateOfBirth } = req.body
@@ -70,11 +70,11 @@ const editProfile = async (req, res, next) => {
          dateOfBirth,
          gender,
       }
-      await myModel.userModel.findByIdAndUpdate({ _id: id }, body)
+      myModel.userModel.findByIdAndUpdate({ _id: id }, body)
       res.status(200).json({ message: 'Cập nhật thành công', data: body })
    } catch (error) {
       console.log('Error edit: ', error)
-      res.status(400).json({ message: error })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
@@ -93,14 +93,15 @@ const changePassword = async (req, res, next) => {
             res.status(400).json({ message: 'Xác nhận mật khẩu phải trùng mật khẩu mới' })
          } else {
             const hashPw = hashPassword(newPasswd)
-            await myModel.userModel.findByIdAndUpdate({ _id: id }, { passwd: hashPw })
+            myModel.userModel.findByIdAndUpdate({ _id: id }, { passwd: hashPw })
             res.status(200).json({ message: 'Đổi mật khẩu thành công', data: hashPw })
          }
       } else {
          res.status(400).json({ message: 'Sai mật khẩu cũ' })
       }
    } catch (error) {
-      console.log('Error :', error);
+      console.log('Error :', error)
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
@@ -116,7 +117,7 @@ const setAddressDefault = async (req, res, next) => {
       res.status(200).json({ data: newAddress })
    } catch (error) {
       console.log('Error: ', error);
-      res.status(400).json({ message: error.message })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
@@ -149,7 +150,7 @@ const postAddress = async (req, res, next) => {
       }
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: error.message })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
@@ -159,7 +160,7 @@ const deleteAddress = async (req, res, next) => {
       res.status(200).json({ data: address })
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: error.message })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
