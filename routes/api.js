@@ -29,6 +29,8 @@ router.get('/products/:id', prodCtrl.productDetails)
 
 // Cart
 router.get('/users/cart/:id', cartCtrl.getCartByUser)
+router.delete('/users/cart/delete/:id', cartCtrl.deleteProductInCart)
+router.post('/users/cart', cartCtrl.addProductToCart)
 router.post('/users/cart/changeQuantity/:id', cartCtrl.changeQuantity)
 
 // Order

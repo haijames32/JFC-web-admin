@@ -32,6 +32,29 @@ const changeQuantity = async (req, res, next) => {
    }
 }
 
+const addProductToCart = async (req, res) => {
+   try {
+      const {
+         productId,
+         userId,
+         numOfProduct
+      } = req.body
+      const product = await myModel.productModel.findById({ _id: productId })
+      const total = product.price * numOfProduct
+      const createProduct = new myModel.cartModel({
+         productId,
+         userId,
+         numOfProduct,
+         total
+      })
+      const newProd = await createProduct.save()
+      res.status(200).json({ data: newProd, message: 'Đã thêm vào giỏ hàng' })
+   } catch (error) {
+      console.log('Error: ', error)
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
+   }
+}
+
 const deleteProductInCart = async (req, res) => {
    try {
       const cart = await myModel.cartModel.findByIdAndDelete({ _id: req.params.id })
@@ -47,4 +70,5 @@ module.exports = {
    getCartByUser,
    changeQuantity,
    deleteProductInCart,
+   addProductToCart,
 }
