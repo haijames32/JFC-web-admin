@@ -25,10 +25,20 @@ const changeQuantity = async (req, res, next) => {
          }
          newQuantity = await cart.save()
       }
-      res.status(200).json({ data: newQuantity })
+      res.status(200).json({ data: newQuantity.numOfProduct })
    } catch (error) {
       console.log('Error: ', error)
       res.status(400).json({ message: error })
+   }
+}
+
+const deleteProductInCart = async (req, res) => {
+   try {
+      const cart = await myModel.cartModel.findByIdAndDelete({ _id: req.params.id })
+      res.status(200).json({ data: cart })
+   } catch (error) {
+      console.log('Error: ', error)
+      res.status(400).json({ message: error.message })
    }
 }
 
@@ -36,4 +46,5 @@ const changeQuantity = async (req, res, next) => {
 module.exports = {
    getCartByUser,
    changeQuantity,
+   deleteProductInCart,
 }
