@@ -28,7 +28,7 @@ const changeQuantity = async (req, res, next) => {
       res.status(200).json({ data: newQuantity.numOfProduct })
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: error })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
@@ -61,10 +61,9 @@ const deleteProductInCart = async (req, res) => {
       res.status(200).json({ data: cart })
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: error.message })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
-
 
 module.exports = {
    getCartByUser,

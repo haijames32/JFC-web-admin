@@ -76,7 +76,7 @@ const postOrder = async (req, res, next) => {
       res.status(200).json({ item: newOrder })
    } catch (error) {
       console.log('Error Post Order: ', error);
-      res.status(400).json({ message: error })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
