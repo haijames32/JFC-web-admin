@@ -15,7 +15,7 @@ const login = async (req, res, next) => {
       }
    } catch (error) {
       console.log('Error Login: ', error);
-      res.status(400).json({ message: error })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
@@ -49,7 +49,7 @@ const register = async (req, res, next) => {
       }
    } catch (error) {
       console.log('Error Register: ', error);
-      res.status(400).json({ message: error })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
@@ -74,7 +74,7 @@ const editProfile = async (req, res, next) => {
       res.status(200).json({ message: 'Cập nhật thành công', data: body })
    } catch (error) {
       console.log('Error edit: ', error)
-      res.status(400).json({ message: error })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
@@ -93,14 +93,15 @@ const changePassword = async (req, res, next) => {
             res.status(400).json({ message: 'Xác nhận mật khẩu phải trùng mật khẩu mới' })
          } else {
             const hashPw = hashPassword(newPasswd)
-            await myModel.userModel.findByIdAndUpdate({ _id: id }, { passwd: hashPw })
+            myModel.userModel.findByIdAndUpdate({ _id: id }, { passwd: hashPw })
             res.status(200).json({ message: 'Đổi mật khẩu thành công', data: hashPw })
          }
       } else {
          res.status(400).json({ message: 'Sai mật khẩu cũ' })
       }
    } catch (error) {
-      console.log('Error :', error);
+      console.log('Error :', error)
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
@@ -116,7 +117,7 @@ const setAddressDefault = async (req, res, next) => {
       res.status(200).json({ data: newAddress })
    } catch (error) {
       console.log('Error: ', error);
-      res.status(400).json({ message: error.message })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
@@ -149,7 +150,7 @@ const postAddress = async (req, res, next) => {
       }
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: error.message })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
@@ -159,7 +160,7 @@ const deleteAddress = async (req, res, next) => {
       res.status(200).json({ data: address })
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: error.message })
+      res.status(400).json({ message: 'Có lỗi xảy ra' })
    }
 }
 
