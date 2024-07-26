@@ -15,7 +15,7 @@ const login = async (req, res) => {
       }
    } catch (error) {
       console.log('Error Login: ', error);
-      res.status(400).json({ message: 'Có lỗi xảy ra' })
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
@@ -49,13 +49,19 @@ const register = async (req, res) => {
       }
    } catch (error) {
       console.log('Error Register: ', error);
-      res.status(400).json({ message: 'Có lỗi xảy ra' })
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
 const getProfile = async (req, res) => {
-   const user = await myModel.userModel.findById({ _id: req.params.id })
-   res.status(200).json({ data: user })
+   try {
+      const user = await myModel.userModel.findById({ _id: req.params.id })
+      res.status(200).json({ data: user })
+   } catch (error) {
+      console.log('Error: ', error)
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+   }
+
 }
 
 const editProfile = async (req, res) => {
@@ -70,15 +76,15 @@ const editProfile = async (req, res) => {
          dateOfBirth,
          gender,
       }
-      myModel.userModel.findByIdAndUpdate({ _id: id }, body)
+      await myModel.userModel.findByIdAndUpdate({ _id: id }, body)
       res.status(200).json({ message: 'Cập nhật thành công', data: body })
    } catch (error) {
       console.log('Error edit: ', error)
-      res.status(400).json({ message: 'Có lỗi xảy ra' })
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
-const changePassword = async (req, res, next) => {
+const changePassword = async (req, res) => {
    try {
       const id = req.params.id
       const {
@@ -93,7 +99,7 @@ const changePassword = async (req, res, next) => {
             res.status(400).json({ message: 'Xác nhận mật khẩu phải trùng mật khẩu mới' })
          } else {
             const hashPw = hashPassword(newPasswd)
-            myModel.userModel.findByIdAndUpdate({ _id: id }, { passwd: hashPw })
+            await myModel.userModel.findByIdAndUpdate({ _id: id }, { passwd: hashPw })
             res.status(200).json({ message: 'Đổi mật khẩu thành công', data: hashPw })
          }
       } else {
@@ -101,27 +107,33 @@ const changePassword = async (req, res, next) => {
       }
    } catch (error) {
       console.log('Error :', error)
-      res.status(400).json({ message: 'Có lỗi xảy ra' })
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
-const getAddressByUser = async (req, res, next) => {
-   const listAddress = await myModel.addressModel.find({ userId: req.params.id })
-   res.status(200).json({ data: listAddress })
+const getAddressByUser = async (req, res) => {
+   try {
+      const listAddress = await myModel.addressModel.find({ userId: req.params.id })
+      res.status(200).json({ data: listAddress })
+   } catch (error) {
+      console.log('Error: ', error)
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+   }
 }
 
-const setAddressDefault = async (req, res, next) => {
+const setAddressDefault = async (req, res) => {
    try {
       const { address } = req.body
-      const newAddress = await myModel.userModel.findByIdAndUpdate({ _id: req.params.id }, { addressDefault: address })
-      res.status(200).json({ data: newAddress })
+      await myModel.userModel.findByIdAndUpdate({ _id: req.params.id }, { addressDefault: address })
+      const user = await myModel.userModel.findById({ _id: req.params.id })
+      res.status(200).json({ data: user.addressDefault })
    } catch (error) {
       console.log('Error: ', error);
-      res.status(400).json({ message: 'Có lỗi xảy ra' })
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
-const postAddress = async (req, res, next) => {
+const postAddress = async (req, res) => {
    try {
       const {
          userId,
@@ -150,17 +162,17 @@ const postAddress = async (req, res, next) => {
       }
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: 'Có lỗi xảy ra' })
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
-const deleteAddress = async (req, res, next) => {
+const deleteAddress = async (req, res) => {
    try {
       const address = await myModel.addressModel.findByIdAndDelete({ _id: req.params.id })
       res.status(200).json({ data: address })
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: 'Có lỗi xảy ra' })
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 

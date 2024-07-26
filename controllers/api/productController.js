@@ -1,18 +1,33 @@
 const myModel = require('../../models/MyModel')
 
 const listCategory = async (req, res) => {
-   const listCate = await myModel.categoryModel.find()
-   res.status(200).json({ data: listCate })
+   try {
+      const listCate = await myModel.categoryModel.find()
+      res.status(200).json({ data: listCate })
+   } catch (error) {
+      console.log('Error: ', error);
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+   }
 }
 
 const listProdByCategory = async (req, res) => {
-   const listProd = await myModel.productModel.find({ category: req.params.id })
-   res.status(200).json({ data: listProd })
+   try {
+      const listProd = await myModel.productModel.find({ category: req.params.id })
+      res.status(200).json({ data: listProd })
+   } catch (error) {
+      console.log('Error: ', error);
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+   }
 }
 
 const productDetails = async (req, res) => {
-   const product = await myModel.productModel.findById({ _id: req.params.id }).populate('category')
-   res.status(200).json({ data: product })
+   try {
+      const product = await myModel.productModel.findById({ _id: req.params.id }).populate('category')
+      res.status(200).json({ data: product })
+   } catch (error) {
+      console.log('Error: ', error);
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+   }
 }
 
 

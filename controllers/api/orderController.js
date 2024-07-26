@@ -7,17 +7,27 @@ const hours = now.getHours()
 const minutes = now.getMinutes()
 
 const getOrderByUser = async (req, res) => {
-   const listOrder = await myModel.orderModel.find({ userId: req.params.id }).populate('userId')
-   res.status(200).json({ data: listOrder })
+   try {
+      const listOrder = await myModel.orderModel.find({ userId: req.params.id }).populate('userId')
+      res.status(200).json({ data: listOrder })
+   } catch (error) {
+      console.log('Error: ', error);
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+   }
 }
 
 const getOrderDetails = async (req, res) => {
-   const order = await myModel.orderModel.findById({ _id: req.params.id })
-   const orderDetails = await myModel.orderDetailsModel
-      .find({ orderId: order.id })
-      .populate('orderId')
-      .populate('productId')
-   res.status(200).json({ data: orderDetails })
+   try {
+      const order = await myModel.orderModel.findById({ _id: req.params.id })
+      const orderDetails = await myModel.orderDetailsModel
+         .find({ orderId: order.id })
+         .populate('orderId')
+         .populate('productId')
+      res.status(200).json({ data: orderDetails })
+   } catch (error) {
+      console.log('Error: ', error);
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+   }
 }
 
 const postOrder = async (req, res) => {
@@ -60,7 +70,7 @@ const postOrder = async (req, res) => {
             })
             createItem.save()
             // Delete products in the Cart after create Order
-            myModel.cartModel.findOneAndDelete({ userId }, { productId: item.productId })
+            await myModel.cartModel.findOneAndDelete({ userId }, { productId: item.productId })
          }
       } else {
          const createItem = new myModel.orderDetailsModel({
@@ -71,12 +81,12 @@ const postOrder = async (req, res) => {
             totalOfItem: Items.totalOfItem
          })
          createItem.save()
-         myModel.cartModel.findOneAndDelete({ userId }, { productId: Items.productId })
+         await myModel.cartModel.findOneAndDelete({ userId }, { productId: Items.productId })
       }
       res.status(200).json({ item: newOrder })
    } catch (error) {
       console.log('Error Post Order: ', error);
-      res.status(400).json({ message: 'Có lỗi xảy ra' })
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 

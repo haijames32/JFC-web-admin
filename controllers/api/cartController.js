@@ -1,32 +1,43 @@
 const myModel = require('../../models/MyModel')
 
 const getCartByUser = async (req, res) => {
-   const listCart = await myModel.cartModel.find({ userId: req.params.id })
-      .populate('productId')
-      .populate('userId')
-   res.status(200).json({ data: listCart })
+   try {
+      const listCart = await myModel.cartModel.find({ userId: req.params.id })
+         .populate('productId')
+         .populate('userId')
+      res.status(200).json({ data: listCart })
+   } catch (error) {
+      console.log('Error: ', error);
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+   }
 }
 
 const changeQuantity = async (req, res) => {
    try {
-      const id = req.params.id
-      const cart = await myModel.cartModel.findById({ _id: id })
-      const body = req.body.quantity
       let newQuantity
+      const body = req.body.quantity
+      const cart = await myModel.cartModel.findById({ _id: req.params.id })
+      const product = await myModel.productModel.findById({ _id: cart.productId })
+      const { price } = product
       switch (body) {
-         case 'increase':
+         case 'up':
             cart.numOfProduct += 1
             break
-         case 'decrease':
+         case 'down':
+            if (cart.numOfProduct == 1) {
+               return res.status(200).json({ message: 'OK' })
+            }
             cart.numOfProduct -= 1
             break
          default: null
       }
+      cart.total = price * cart.numOfProduct
+      console.log(cart);
       newQuantity = await cart.save()
-      res.status(200).json({ data: newQuantity.numOfProduct })
+      res.status(200).json({ data: newQuantity })
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: 'Có lỗi xảy ra' })
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
@@ -39,17 +50,17 @@ const addProductToCart = async (req, res) => {
       } = req.body
       const product = await myModel.productModel.findById({ _id: productId })
       const total = product.price * numOfProduct
-      const createProduct = new myModel.cartModel({
+      const addProdInCart = new myModel.cartModel({
          productId,
          userId,
          numOfProduct,
          total
       })
-      const newProd = await createProduct.save()
+      const newProd = await addProdInCart.save()
       res.status(200).json({ data: newProd, message: 'Đã thêm vào giỏ hàng' })
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: 'Có lỗi xảy ra' })
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
@@ -59,7 +70,7 @@ const deleteProductInCart = async (req, res) => {
       res.status(200).json({ data: cart })
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: 'Có lỗi xảy ra' })
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
