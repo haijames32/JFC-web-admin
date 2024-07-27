@@ -20,10 +20,8 @@ const getListOrder = async (req, res, next) => {
 }
 
 const getOrderDetails = async (req, res, next) => {
-   const order = await myModel.orderModel.findById({ _id: req.params.id }).populate('userId')
-   const user = await myModel.userModel.findById({ _id: order.userId._id })
-   const addressOfUser = await myModel.addressModel.findById({ _id: user.addressDefault })
-   const { receiver, phoneNumber, street, commune, district, city } = addressOfUser
+   const order = await myModel.orderModel.findById({ _id: req.params.id }).populate('userId').populate('address')
+   const { receiver, phoneNumber, street, commune, district, city } = order.address
    const address = `${receiver}, ${phoneNumber}.
 ${street}, ${commune}, ${district}, ${city}.`
    // for (const property in iaddress) {

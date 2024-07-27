@@ -35,6 +35,7 @@ const postOrder = async (req, res) => {
       let status = '', totalOfOrder = 0
       const {
          userId,
+         address,
          paymentMethod,
          Items
       } = req.body
@@ -55,6 +56,7 @@ const postOrder = async (req, res) => {
          userId,
          date,
          status,
+         address,
          paymentMethod,
          total: totalOfOrder
       })
@@ -68,7 +70,7 @@ const postOrder = async (req, res) => {
                numOfItem: item.numOfItem,
                totalOfItem: item.totalOfItem
             })
-            createItem.save()
+            await createItem.save()
             // Delete products in the Cart after create Order
             await myModel.cartModel.findOneAndDelete({ userId }, { productId: item.productId })
          }
@@ -80,12 +82,24 @@ const postOrder = async (req, res) => {
             numOfItem: Items.numOfItem,
             totalOfItem: Items.totalOfItem
          })
-         createItem.save()
+         await createItem.save()
          await myModel.cartModel.findOneAndDelete({ userId }, { productId: Items.productId })
       }
       res.status(200).json({ item: newOrder })
    } catch (error) {
-      console.log('Error Post Order: ', error);
+      console.log('Error: ', error)
+      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+   }
+}
+
+const changeAddress = async (req, res) => {
+   try {
+      const id = req.params.id
+      const { address } = req.body
+      await myModel.orderModel.findByIdAndUpdate({ _id: id }, { address })
+      res.status(200).json({ data: address })
+   } catch (error) {
+      console.log('Error: ', error)
       res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
@@ -94,4 +108,5 @@ module.exports = {
    getOrderByUser,
    getOrderDetails,
    postOrder,
+   changeAddress,
 }
