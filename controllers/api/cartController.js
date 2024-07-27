@@ -2,13 +2,14 @@ const myModel = require('../../models/MyModel')
 
 const getCartByUser = async (req, res) => {
    try {
-      const listCart = await myModel.cartModel.find({ userId: req.params.id })
+      const listCart = await myModel.cartModel
+         .find({ userId: req.params.id })
          .populate('productId')
          .populate('userId')
-      res.status(200).json({ data: listCart })
+      return res.status(200).json({ data: listCart })
    } catch (error) {
       console.log('Error: ', error);
-      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+      return res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
@@ -18,7 +19,6 @@ const changeQuantity = async (req, res) => {
       const body = req.body.quantity
       const cart = await myModel.cartModel.findById({ _id: req.params.id })
       const product = await myModel.productModel.findById({ _id: cart.productId })
-      const { price } = product
       switch (body) {
          case 'up':
             cart.numOfProduct += 1
@@ -31,13 +31,12 @@ const changeQuantity = async (req, res) => {
             break
          default: null
       }
-      cart.total = price * cart.numOfProduct
-      console.log(cart);
+      cart.total = product.price * cart.numOfProduct
       newQuantity = await cart.save()
-      res.status(200).json({ data: newQuantity })
+      return res.status(200).json({ data: newQuantity })
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+      return res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
@@ -57,20 +56,20 @@ const addProductToCart = async (req, res) => {
          total
       })
       const newProd = await addProdInCart.save()
-      res.status(200).json({ data: newProd, message: 'Đã thêm vào giỏ hàng' })
+      return res.status(200).json({ data: newProd, message: 'Đã thêm vào giỏ hàng' })
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+      return res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
 const deleteProductInCart = async (req, res) => {
    try {
       const cart = await myModel.cartModel.findByIdAndDelete({ _id: req.params.id })
-      res.status(200).json({ data: cart })
+      return res.status(200).json({ data: cart })
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+      return res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 

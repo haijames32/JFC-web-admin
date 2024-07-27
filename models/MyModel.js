@@ -62,6 +62,7 @@ const orderSchema = new db.mongoose.Schema(
       userId: { type: db.mongoose.Schema.Types.ObjectId, ref: 'userModel', required: true },
       date: { type: String, required: true },
       status: { type: String, required: true },
+      address: { type: db.mongoose.Schema.Types.ObjectId, ref: 'addressModel', required: true },
       paymentMethod: { type: String, required: true },
       total: { type: Number, required: true },
    },
