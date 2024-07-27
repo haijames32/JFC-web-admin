@@ -38,6 +38,7 @@ router.get('/user/order/:id', orderCtrl.getOrderByUser)
 router.get('/user/order/details/:id', orderCtrl.getOrderDetails)
 router.post('/user/order', orderCtrl.postOrder)
 router.patch('/user/order/changeAddress/:id', orderCtrl.changeAddress)
+router.patch('/user/order/cancelOrder/:id', orderCtrl.cancelOrder)
 
 
 module.exports = router
