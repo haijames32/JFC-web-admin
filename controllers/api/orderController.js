@@ -1,12 +1,9 @@
 const myModel = require('../../models/MyModel')
 const {
    confirmed,
-   finished,
-   onDelivery,
    paidWaitConfirm,
    payCOD,
    payZaloPay,
-   received,
    waitConfirm,
    cancelled
 } = require('../../utils/process')
@@ -20,11 +17,13 @@ const {
 
 const getOrderByUser = async (req, res) => {
    try {
-      const listOrder = await myModel.orderModel.find({ userId: req.params.id }).populate('userId')
-      res.status(200).json({ data: listOrder })
+      const listOrder = await myModel.orderModel
+         .find({ userId: req.params.id })
+         .populate('userId')
+      return res.status(200).json({ data: listOrder })
    } catch (error) {
       console.log('Error: ', error);
-      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+      return res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
