@@ -24,8 +24,8 @@ router.delete('/user/deleteAddress/:id', userCtrl.deleteAddress)
 
 // Product
 router.get('/category', prodCtrl.listCategory)
-router.get('/category/:id', prodCtrl.listProdByCategory)
-router.get('/products/:id', prodCtrl.productDetails)
+router.get('/productByCategory/:id', prodCtrl.listProdByCategory)
+router.get('/product/:id', prodCtrl.productDetails)
 
 // Cart
 router.get('/user/cart/:id', cartCtrl.getCartByUser)
