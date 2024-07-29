@@ -65,24 +65,55 @@ const postAddress = async (req, res) => {
          city
       } = req.body
       if (phoneNumber.length < 10 || phoneNumber.length > 10) {
-         res.status(400).json({ message: 'Số điện thoại phải đủ 10 số' })
-         return
-      } else {
-         const createAddress = new myModel.addressModel({
-            userId,
-            receiver,
-            phoneNumber,
-            street,
-            commune,
-            district,
-            city
-         })
-         const newAddress = await createAddress.save()
-         res.status(200).json({ data: newAddress })
+         return res.status(400).json({ message: 'Số điện thoại phải đủ 10 số' })
       }
+      const createAddress = new myModel.addressModel({
+         userId,
+         receiver,
+         phoneNumber,
+         street,
+         commune,
+         district,
+         city
+      })
+      const newAddress = await createAddress.save()
+      res.status(200).json({ data: newAddress })
    } catch (error) {
       console.log('Error: ', error)
       res.status(400).json({ message: 'Đã xảy ra lỗi' })
+   }
+}
+
+const changeAddress = async (req, res) => {
+   try {
+      const id = req.params.id
+      const {
+         userId,
+         receiver,
+         phoneNumber,
+         street,
+         commune,
+         district,
+         city
+      } = req.body
+      if (phoneNumber.length < 10 || phoneNumber.length > 10) {
+         return res.status(400).json({ message: 'Số điện thoại phải đủ 10 số' })
+      }
+      const body = {
+         userId,
+         receiver,
+         phoneNumber,
+         street,
+         commune,
+         district,
+         city
+      }
+      await myModel.addressModel.findByIdAndUpdate({ _id: id }, body)
+      const newAddress = await myModel.addressModel.findById({ _id: id })
+      return res.status(200).json({ data: newAddress })
+   } catch (error) {
+      console.log('Error: ', error)
+      return res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 

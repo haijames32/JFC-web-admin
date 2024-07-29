@@ -14,8 +14,8 @@ const login = async (req, res) => {
          res.status(400).json({ message: 'Tài khoản không tồn tại' })
       }
    } catch (error) {
-      console.log('Error Login: ', error);
-      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+      console.log('Error: ', error);
+      return res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
@@ -33,7 +33,7 @@ const register = async (req, res) => {
       const pw = hashPassword(passwd)
       const user = await myModel.userModel.findOne({ username: username })
       if (user) {
-         res.status(400).json({ message: 'Tài khoản đã tồn tại' })
+         return res.status(400).json({ message: 'Tài khoản đã tồn tại' })
       } else {
          const body = new myModel.userModel({
             name,
@@ -45,11 +45,11 @@ const register = async (req, res) => {
             gender: gender ?? 'None',
          })
          const newUser = await body.save()
-         res.status(200).json({ message: 'Đăng ký thành công', data: newUser })
+         return res.status(200).json({ message: 'Đăng ký thành công', data: newUser })
       }
    } catch (error) {
-      console.log('Error Register: ', error);
-      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+      console.log('Error: ', error);
+      return res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
@@ -65,18 +65,18 @@ const changePassword = async (req, res) => {
       const check = checkHashedPassword(oldPasswd, user.passwd)
       if (check) {
          if (newPasswd !== confirmNewPasswd) {
-            res.status(400).json({ message: 'Xác nhận mật khẩu phải trùng mật khẩu mới' })
+            return res.status(400).json({ message: 'Xác nhận mật khẩu phải trùng mật khẩu mới' })
          } else {
             const hashPw = hashPassword(newPasswd)
             await myModel.userModel.findByIdAndUpdate({ _id: id }, { passwd: hashPw })
-            res.status(200).json({ message: 'Đổi mật khẩu thành công', data: hashPw })
+            return res.status(200).json({ message: 'Đổi mật khẩu thành công', data: hashPw })
          }
       } else {
-         res.status(400).json({ message: 'Sai mật khẩu cũ' })
+         return res.status(400).json({ message: 'Sai mật khẩu cũ' })
       }
    } catch (error) {
       console.log('Error :', error)
-      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+      return res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 

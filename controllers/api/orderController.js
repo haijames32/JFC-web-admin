@@ -101,7 +101,7 @@ const postOrder = async (req, res) => {
    }
 }
 
-const changeAddress = async (req, res) => {
+const changeOrderAddress = async (req, res) => {
    try {
       const id = req.params.id
       const { address } = req.body
@@ -146,6 +146,6 @@ module.exports = {
    getOrderByUser,
    getOrderDetails,
    postOrder,
-   changeAddress,
+   changeOrderAddress,
    cancelOrder,
 }
