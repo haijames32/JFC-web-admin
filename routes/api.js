@@ -11,12 +11,14 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-// User
+// Auth
 router.post('/user/login', userCtrl.login)
 router.post('/user/register', userCtrl.register)
+router.patch('/user/changePassword/:id', userCtrl.changePassword)
+
+// User
 router.get('/user/profile/:id', userCtrl.getProfile)
 router.put('/user/editProfile/:id', userCtrl.editProfile)
-router.patch('/user/changePassword/:id', userCtrl.changePassword)
 router.get('/user/address/:id', userCtrl.getAddressByUser)
 router.post('/user/address', userCtrl.postAddress)
 router.patch('/user/setAddressDefault/:id', userCtrl.setAddressDefault)
@@ -37,6 +39,8 @@ router.patch('/user/cart/changeQuantity/:id', cartCtrl.changeQuantity)
 router.get('/user/order/:id', orderCtrl.getOrderByUser)
 router.get('/user/order/details/:id', orderCtrl.getOrderDetails)
 router.post('/user/order', orderCtrl.postOrder)
+router.patch('/user/order/changeAddress/:id', orderCtrl.changeAddress)
+router.patch('/user/order/cancelOrder/:id', orderCtrl.cancelOrder)
 
 
 module.exports = router
