@@ -1,19 +1,17 @@
 const myModel = require('../../models/MyModel')
 const {
+   day,
+   hours,
+   minutes,
+   month,
+   year,
    confirmed,
    paidWaitConfirm,
    payCOD,
    payZaloPay,
    waitConfirm,
    cancelled
-} = require('../../utils/process')
-const {
-   day,
-   hours,
-   minutes,
-   month,
-   year
-} = require('../../utils/date')
+} = require('../../utils/index')
 
 const getOrderByUser = async (req, res) => {
    try {
@@ -110,7 +108,11 @@ const changeAddress = async (req, res) => {
       const order = await myModel.orderModel.findById({ _id: id })
       if (order.status == waitConfirm || order.status == paidWaitConfirm || order.status == confirmed) {
          await myModel.orderModel.findByIdAndUpdate({ _id: id }, { address })
-         return res.status(200).json({ data: address })
+         const od = await myModel.orderModel
+            .findById({ _id: id })
+            .populate('userId')
+            .populate('address')
+         return res.status(200).json({ data: od })
       } else {
          return res.status(400).json({ message: 'Không thể thay đổi địa chỉ' })
       }

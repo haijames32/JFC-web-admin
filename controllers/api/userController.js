@@ -3,11 +3,12 @@ const { hashPassword, checkHashedPassword } = require('../../services/userServic
 
 const login = async (req, res) => {
    try {
+      const { username, passwd } = req.body
       const user = await myModel.userModel
-         .findOne({ username: req.body.username })
+         .findOne({ username: username })
          .populate('addressDefault')
       if (user) {
-         const check = checkHashedPassword(req.body.passwd, user.passwd)
+         const check = checkHashedPassword(passwd, user.passwd)
          if (check) {
             return res.status(200).json({ message: 'Đăng nhập thành công', data: user })
          } else {
