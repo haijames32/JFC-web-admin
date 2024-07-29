@@ -4,7 +4,8 @@ const {
    userCtrl,
    prodCtrl,
    cartCtrl,
-   orderCtrl
+   orderCtrl,
+   authCtrl
 } = require('../controllers/api/index')
 
 const bodyParser = require('body-parser');
@@ -12,9 +13,9 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
 // Auth
-router.post('/user/login', userCtrl.login)
-router.post('/user/register', userCtrl.register)
-router.patch('/user/changePassword/:id', userCtrl.changePassword)
+router.post('/user/login', authCtrl.login)
+router.post('/user/register', authCtrl.register)
+router.patch('/user/changePassword/:id', authCtrl.changePassword)
 
 // User
 router.get('/user/profile/:id', userCtrl.getProfile)
