@@ -22,6 +22,7 @@ router.get('/user/profile/:id', userCtrl.getProfile)
 router.put('/user/editProfile/:id', userCtrl.editProfile)
 router.get('/user/address/:id', userCtrl.getAddressByUser)
 router.post('/user/address', userCtrl.postAddress)
+router.put('/user/changeAddress/:id', userCtrl.changeAddress)
 router.patch('/user/setAddressDefault/:id', userCtrl.setAddressDefault)
 router.delete('/user/deleteAddress/:id', userCtrl.deleteAddress)
 

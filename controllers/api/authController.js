@@ -3,9 +3,10 @@ const { hashPassword, checkHashedPassword } = require('../../services/userServic
 
 const login = async (req, res) => {
    try {
-      const user = await myModel.userModel.findOne({ username: req.body.username }).populate('addressDefault')
+      const { username, passwd } = req.body
+      const user = await myModel.userModel.findOne({ username: username }).populate('addressDefault')
       if (user) {
-         const check = checkHashedPassword(req.body.passwd, user.passwd)
+         const check = checkHashedPassword(passwd, user.passwd)
          if (check)
             res.status(200).json({ message: 'Đăng nhập thành công', data: user })
          else
@@ -27,26 +28,29 @@ const register = async (req, res) => {
          email,
          phoneNumber,
          passwd,
+         rePasswd,
          dateOfBirth,
          gender,
       } = req.body
-      const pw = hashPassword(passwd)
       const user = await myModel.userModel.findOne({ username: username })
       if (user) {
          return res.status(400).json({ message: 'Tài khoản đã tồn tại' })
-      } else {
-         const body = new myModel.userModel({
-            name,
-            username,
-            email,
-            phoneNumber,
-            passwd: pw,
-            dateOfBirth,
-            gender: gender ?? 'None',
-         })
-         const newUser = await body.save()
-         return res.status(200).json({ message: 'Đăng ký thành công', data: newUser })
       }
+      if (rePasswd !== passwd) {
+         return res.status(400).json({ message: 'Xác nhận mật khẩu phải trùng với mật khẩu' })
+      }
+      const pw = hashPassword(passwd)
+      const body = new myModel.userModel({
+         name,
+         username,
+         email,
+         phoneNumber,
+         passwd: pw,
+         dateOfBirth,
+         gender: gender ?? 'None',
+      })
+      const newUser = await body.save()
+      return res.status(200).json({ message: 'Đăng ký thành công', data: newUser })
    } catch (error) {
       console.log('Error: ', error);
       return res.status(400).json({ message: 'Đã xảy ra lỗi' })
@@ -55,7 +59,7 @@ const register = async (req, res) => {
 
 const changePassword = async (req, res) => {
    try {
-      const id = req.params.id
+      const { id } = req.params
       const {
          oldPasswd,
          newPasswd,

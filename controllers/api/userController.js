@@ -13,7 +13,7 @@ const getProfile = async (req, res) => {
 
 const editProfile = async (req, res) => {
    try {
-      const id = req.params.id
+      const { id } = req.params
       const { name, username, email, phoneNumber, gender, dateOfBirth } = req.body
       const body = {
          name,
@@ -43,13 +43,14 @@ const getAddressByUser = async (req, res) => {
 
 const setAddressDefault = async (req, res) => {
    try {
+      const { id } = req.params
       const { address } = req.body
-      await myModel.userModel.findByIdAndUpdate({ _id: req.params.id }, { addressDefault: address })
-      const user = await myModel.userModel.findById({ _id: req.params.id })
-      res.status(200).json({ data: user.addressDefault })
+      await myModel.userModel.findByIdAndUpdate({ _id: id }, { addressDefault: address })
+      const user = await myModel.userModel.findById({ _id: id }).populate('addressDefault')
+      return res.status(200).json({ data: user.addressDefault })
    } catch (error) {
       console.log('Error: ', error);
-      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+      return res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
@@ -77,18 +78,17 @@ const postAddress = async (req, res) => {
          city
       })
       const newAddress = await createAddress.save()
-      res.status(200).json({ data: newAddress })
+      return res.status(200).json({ data: newAddress })
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+      return res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
 const changeAddress = async (req, res) => {
    try {
-      const id = req.params.id
+      const { id } = req.params
       const {
-         userId,
          receiver,
          phoneNumber,
          street,
@@ -100,7 +100,6 @@ const changeAddress = async (req, res) => {
          return res.status(400).json({ message: 'Số điện thoại phải đủ 10 số' })
       }
       const body = {
-         userId,
          receiver,
          phoneNumber,
          street,
@@ -120,10 +119,10 @@ const changeAddress = async (req, res) => {
 const deleteAddress = async (req, res) => {
    try {
       const address = await myModel.addressModel.findByIdAndDelete({ _id: req.params.id })
-      res.status(200).json({ data: address })
+      return res.status(200).json({ data: address })
    } catch (error) {
       console.log('Error: ', error)
-      res.status(400).json({ message: 'Đã xảy ra lỗi' })
+      return res.status(400).json({ message: 'Đã xảy ra lỗi' })
    }
 }
 
@@ -133,5 +132,6 @@ module.exports = {
    getAddressByUser,
    setAddressDefault,
    postAddress,
+   changeAddress,
    deleteAddress,
 }

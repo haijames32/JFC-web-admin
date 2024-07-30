@@ -103,7 +103,7 @@ const postOrder = async (req, res) => {
 
 const changeOrderAddress = async (req, res) => {
    try {
-      const id = req.params.id
+      const { id } = req.params
       const { address } = req.body
       const order = await myModel.orderModel.findById({ _id: id })
       if (order.status == waitConfirm || order.status == paidWaitConfirm || order.status == confirmed) {
@@ -124,7 +124,7 @@ const changeOrderAddress = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
    try {
-      const id = req.params.id
+      const { id } = req.params
       const order = await myModel.orderModel.findById({ _id: id })
       if (order.status == waitConfirm || order.status == paidWaitConfirm || order.status == confirmed) {
          await myModel.orderModel.findByIdAndUpdate({ _id: id }, { status: cancelled })
